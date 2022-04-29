@@ -1,15 +1,20 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import BottomTabs from './src/components/navigation/BottomTabs';
+import { NativeBaseProvider } from 'native-base';
+import { AuthProvider } from './src/contexts/AuthContext';
+import Navigator from './src/components/routes/Navigator';
 
-const Tab = createBottomTabNavigator();
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <BottomTabs />
-    </NavigationContainer >
+    <AuthProvider>
+      <NativeBaseProvider>
+        <NavigationContainer>
+          <Navigator />
+        </NavigationContainer >
+      </NativeBaseProvider>
+    </AuthProvider>
   );
-};
+}
+
 export default App;
