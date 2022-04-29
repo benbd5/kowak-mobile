@@ -174,6 +174,29 @@ const userProfile = async () => {
     .catch(error => console.log('error', error))
 }
 
+const getAllWorkspaces = async () => {
+  var axios = require('axios');
+  // On récupère le token de l'utilisateur connecté pour le passer dans le header
+  const getUserToken = await AsyncStorage.getItem('access_token')
+  const userToken = getUserToken ? JSON.parse(getUserToken) : null
+
+  axios.get("http://192.168.1.39:8000/api/workSpace", {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'X-CSRF-TOKEN': userToken,
+      'X-XSRF-TOKEN': userToken,
+      'Cookie': `XSRF-TOKEN=${userToken}`,
+      Authorization: `Bearer ${userToken}`
+    }
+  })
+    .then(response => {
+      console.log('getAllWorkspaces', response);
+      return response.data
+    })
+    .catch(error => console.log('error', error))
+}
+
 
 export {
   register,
@@ -182,5 +205,6 @@ export {
   resetPassword,
   resendEmailVerification,
   logout,
-  userProfile
+  userProfile,
+  getAllWorkspaces
 }
