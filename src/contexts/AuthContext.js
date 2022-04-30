@@ -155,7 +155,7 @@ const persistAuth = async (data) => {
 const rehydrateAuth = async () => {
   try {
     const data = await AsyncStorage.getItem('AUTH')
-    console.log('data contexte', data ? JSON.parse(data) : null);
+    // console.log('data contexte', data ? JSON.parse(data) : null);
     return data ? JSON.parse(data) : null
   } catch (error) {
     console.error(error)

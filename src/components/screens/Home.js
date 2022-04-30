@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, Text, Button } from 'react-native'
 import { logoutUser, useAuth } from '../../contexts/AuthContext';
-import { logout, userProfile } from '../../services/api';
+import { getAllWorkspaces, logout, userProfile } from '../../services/api';
 
 function HomeScreen({ navigation }) {
-  console.log('profile', userProfile());
+  // console.log('profile', userProfile());
+  console.log('getAllWorkspaces', getAllWorkspaces());
   const { dispatch } = useAuth()
 
   return (

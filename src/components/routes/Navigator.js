@@ -22,7 +22,7 @@ const AuthRoutes = () => (
 
 function AuthenticatedRoutes() {
   const { state } = useAuth();
-  console.log('user', state)
+  // console.log('user', state)
   if (state.user) {
     return <BottomTabs />
   }
