@@ -1,13 +1,16 @@
 import React from "react";
 import { Text, View, TextInput, Button, Alert } from "react-native";
 import { useForm, Controller } from "react-hook-form";
-import { Checkbox, FormControl, Input, TextArea } from "native-base";
+import { Checkbox, FlatList, FormControl, Input, List, TextArea } from "native-base";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { postWorkspace } from "../../../services/api";
+import axios from "axios";
 
 export default function App() {
   const [parkingChecked, setParkingChecked] = useState(false);
+  const [adress, setAdress] = useState('');
+  const [addressSuggestions, setAddressSuggestions] = useState([]);
 
   const toggleParkingChecked = () => {
     console.log("toggleParkingChecked before", parkingChecked);
@@ -26,7 +29,7 @@ export default function App() {
       desk: '55',
       projector: '5',
       description: '555',
-      adress: '55',
+      adress: '',
       city: '55',
       zipCode: '55',
       departement: '55',
@@ -42,6 +45,28 @@ export default function App() {
     console.log('data', data);
     postWorkspace(data)
   }
+
+  // Api adresses
+  useEffect(() => {
+    const getAdress = async () => {
+      var axios = require('axios');
+      axios
+        .get(`https://api-adresse.data.gouv.fr/search/?q=${adress}&type=housenumber&autocomplete=1`)
+        .then(function (response) {
+          console.log('response api adresse', response.data);
+          setAddressSuggestions(response.data.features);
+          console.log('addressSuggestions', addressSuggestions);
+          // return response.data
+        })
+        .catch(function (error) {
+          console.log('error api adresse', error);
+        });
+    }
+    getAdress();
+  }, [adress])
+
+
+
 
   return (
     <KeyboardAwareScrollView>
@@ -207,12 +232,35 @@ export default function App() {
             <Input
               placeholder="Numéro et nom de rue"
               onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
+              onChangeText={(text) => setAdress(text)}
+              value={adress}
             />
           )}
           name="adress"
         />
+
+        <FlatList
+          data={addressSuggestions}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <Text
+              style={{
+                padding: 10,
+                fontSize: 18,
+                height: 44,
+                borderBottomWidth: 1,
+                borderBottomColor: '#ccc',
+                backgroundColor: '#fff',
+                color: '#000',
+              }}
+              title={item.properties.label}
+              onPress={() => setAdress(item.properties.label)}
+            >
+              {item.properties.label}
+            </Text>
+          )}
+        />
+
 
         <FormControl.Label>Code postal</FormControl.Label>
         <Controller
