@@ -5,12 +5,31 @@ import { Checkbox, FlatList, FormControl, Input, List, TextArea } from "native-b
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useState, useEffect } from "react";
 import { postWorkspace } from "../../../services/api";
-import axios from "axios";
 
 export default function App() {
   const [parkingChecked, setParkingChecked] = useState(false);
   const [adress, setAdress] = useState('');
   const [addressSuggestions, setAddressSuggestions] = useState([]);
+  const [displaySuggestions, setDisplaySuggestions] = useState(false);
+
+  const [workspace, setWorkspace] = useState({
+    surface: '',
+    name: 'name',
+    kitchen: 0,
+    parking: 1,
+    computerScreen: '',
+    handicappedPersonsAccess: 0,
+    desk: '',
+    projector: '',
+    description: '',
+    adress: '',
+    city: '',
+    zipCode: '',
+    departement: '',
+    region: '',
+    latitude: '',
+    longitude: '',
+  });
 
   const toggleParkingChecked = () => {
     console.log("toggleParkingChecked before", parkingChecked);
@@ -20,26 +39,26 @@ export default function App() {
 
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
-      surface: '55',
-      name: '4545',
-      kitchen: 0,
-      parking: 1,
-      computerScreen: '55',
-      handicappedPersonsAccess: 0,
-      desk: '55',
-      projector: '5',
-      description: '555',
-      adress: '',
-      city: '55',
-      zipCode: '55',
-      departement: '55',
-      region: '55',
-      latitude: '55',
-      longitude: '55',
-      latitude: "46.562272",
-      longitude: "-1.454480"
+      surface: workspace.surface,
+      name: workspace.name,
+      kitchen: workspace.kitchen,
+      parking: workspace.parking,
+      computerScreen: workspace.computerScreen,
+      handicappedPersonsAccess: workspace.handicappedPersonsAccess,
+      desk: workspace.desk,
+      projector: workspace.projector,
+      description: workspace.description,
+      adress: workspace.adress,
+      city: workspace.city,
+      zipCode: workspace.zipCode,
+      departement: workspace.departement,
+      region: workspace.region,
+      latitude: workspace.latitude,
+      longitude: workspace.longitude,
     }
   });
+
+  console.log("workspace", workspace);
 
   const onSubmit = (data) => {
     console.log('data', data);
@@ -54,9 +73,9 @@ export default function App() {
         .get(`https://api-adresse.data.gouv.fr/search/?q=${adress}&type=housenumber&autocomplete=1`)
         .then(function (response) {
           console.log('response api adresse', response.data);
+          setDisplaySuggestions(true);
           setAddressSuggestions(response.data.features);
           console.log('addressSuggestions', addressSuggestions);
-          // return response.data
         })
         .catch(function (error) {
           console.log('error api adresse', error);
@@ -166,7 +185,7 @@ export default function App() {
               value={value}
             />
           )}
-          name="handicappedPersonAccess"
+          name="handicappedPersonsAccess"
         />
 
         <FormControl.Label>Nombre d'écrans</FormControl.Label>
@@ -239,28 +258,42 @@ export default function App() {
           name="adress"
         />
 
-        <FlatList
-          data={addressSuggestions}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <Text
-              style={{
-                padding: 10,
-                fontSize: 18,
-                height: 44,
-                borderBottomWidth: 1,
-                borderBottomColor: '#ccc',
-                backgroundColor: '#fff',
-                color: '#000',
-              }}
-              title={item.properties.label}
-              onPress={() => setAdress(item.properties.label)}
-            >
-              {item.properties.label}
-            </Text>
-          )}
-        />
-
+        {displaySuggestions && (
+          <FlatList
+            data={addressSuggestions}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <Text
+                style={{
+                  padding: 10,
+                  fontSize: 12,
+                  height: 44,
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#ccc',
+                  backgroundColor: '#fff',
+                  color: '#000',
+                }}
+                title={item.properties.label}
+                onPress={() => {
+                  setAdress(item.properties.label)
+                  setWorkspace(workspace => ({
+                    // ...workspace,
+                    adress: item.properties.label,
+                    zipCode: item.properties.postcode,
+                    city: item.properties.city,
+                    departement: item.properties.context.split(',')[1],
+                    region: item.properties.context.split(',')[2],
+                    latitude: item.geometry.coordinates[0],
+                    longitude: item.geometry.coordinates[1],
+                  }))
+                  setDisplaySuggestions(false)
+                }}
+              >
+                {item.properties.label}
+              </Text>
+            )}
+          />
+        )}
 
         <FormControl.Label>Code postal</FormControl.Label>
         <Controller
@@ -275,6 +308,7 @@ export default function App() {
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
+            // value={workspace.zipCode}
             />
           )}
           name="zipCode"
@@ -291,6 +325,7 @@ export default function App() {
               placeholder="Vendée"
               onBlur={onBlur}
               onChangeText={onChange}
+              // value={workspace.departement}
               value={value}
             />
           )}
@@ -308,6 +343,7 @@ export default function App() {
               placeholder="Vendée"
               onBlur={onBlur}
               onChangeText={onChange}
+              // value={workspace.region}
               value={value}
             />
           )}
@@ -325,6 +361,7 @@ export default function App() {
               placeholder="44000"
               onBlur={onBlur}
               onChangeText={onChange}
+              // value={workspace.city}
               value={value}
             />
           )}
@@ -333,6 +370,6 @@ export default function App() {
 
         <Button title="Ajouter" onPress={handleSubmit(onSubmit)} />
       </View>
-    </KeyboardAwareScrollView>
+    </KeyboardAwareScrollView >
   );
 }
