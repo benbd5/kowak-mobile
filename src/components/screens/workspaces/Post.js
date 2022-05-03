@@ -15,12 +15,12 @@ export default function App() {
   const [workspace, setWorkspace] = useState({
     surface: '',
     name: 'name',
-    kitchen: 0,
-    parking: 1,
+    kitchen: 'false',
+    parking: 'false',
     computerScreen: '',
-    handicappedPersonsAccess: 0,
+    handicappedPersonsAccess: 'false',
     desk: '',
-    projector: '',
+    projector: 'false',
     description: '',
     adress: '',
     city: '',
@@ -31,38 +31,9 @@ export default function App() {
     longitude: '',
   });
 
-  const toggleParkingChecked = () => {
-    console.log("toggleParkingChecked before", parkingChecked);
-    setParkingChecked(!parkingChecked);
-    console.log("toggleParkingChecked after", parkingChecked);
-  };
-
-  const { control, handleSubmit, formState: { errors } } = useForm({
-    defaultValues: {
-      surface: workspace.surface,
-      name: workspace.name,
-      kitchen: workspace.kitchen,
-      parking: workspace.parking,
-      computerScreen: workspace.computerScreen,
-      handicappedPersonsAccess: workspace.handicappedPersonsAccess,
-      desk: workspace.desk,
-      projector: workspace.projector,
-      description: workspace.description,
-      adress: workspace.adress,
-      city: workspace.city,
-      zipCode: workspace.zipCode,
-      departement: workspace.departement,
-      region: workspace.region,
-      latitude: workspace.latitude,
-      longitude: workspace.longitude,
-    }
-  });
-
-  console.log("workspace", workspace);
-
-  const onSubmit = (data) => {
-    console.log('data', data);
-    postWorkspace(data)
+  const onSubmit = () => {
+    console.log("workspace", workspace);
+    // postWorkspace(data)
   }
 
   // Api adresses
@@ -84,178 +55,89 @@ export default function App() {
     getAdress();
   }, [adress])
 
-
-
-
   return (
     <KeyboardAwareScrollView>
       <View>
         <FormControl.Label>Surface</FormControl.Label>
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              // style={styles.input}
-              keyboardType="numeric"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-          name="surface"
+        <TextInput
+          keyboardType="numeric"
+
+          onChangeText={value => setWorkspace({ ...workspace, surface: value })}
+          value={workspace.surface}
         />
-        {errors.firstName && <Text>This is required.</Text>}
 
         <FormControl.Label>Quelles sont les caractéristiques de votre espace ?</FormControl.Label>
         <FormControl.Label>Cuisine</FormControl.Label>
-        <Controller
-          control={control}
-          rules={{
-            maxLength: 100,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Checkbox
-              // style={styles.input}
-              onValueChange={toggleParkingChecked}
-              // value={parkingChecked}
-              isPressed={toggleParkingChecked}
-              value={value}
-              // isPressed={value ? true : false}
-              onBlur={onBlur}
-            // onChangeText={onChange}
-            // value={value}
-            />
-          )}
-          name="kitchen"
+
+        <Checkbox
+          // style={styles.input}
+          // value={parkingChecked}
+          value={workspace.kitchen}
+          // isPressed={value ? true : false}
+          onChange={() => setWorkspace({ ...workspace, kitchen: !workspace.kitchen })}
+        // onChangeText={onChange}
+        // value={value}
         />
 
         <FormControl.Label>Parking</FormControl.Label>
-        <Controller
-          control={control}
-          rules={{
-            maxLength: 100,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Checkbox
-              // style={styles.input}
-              // isPressed={!value}
-              // onChange={value ? true : false}
-              onValueChange={toggleParkingChecked}
-              onBlur={onBlur}
-              value={parkingChecked}
-            />
-          )}
-          name="parking"
+
+        <Checkbox
+          // style={styles.input}
+          // isPressed={!value}
+          // onChange={value ? true : false}
+          onChange={() => setWorkspace({ ...workspace, parking: !workspace.parking })}
+          value={workspace.parking}
         />
 
         <FormControl.Label>Projecteur</FormControl.Label>
-        <Controller
-          control={control}
-          rules={{
-            maxLength: 100,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Checkbox
-              // style={styles.input}
-              isPressed={value ? true : false}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-          name="projector"
+        <Checkbox
+          // style={styles.input}
+
+          onChange={() => setWorkspace({ ...workspace, projector: !workspace.projector })}
+          value={workspace.projector}
         />
 
         <FormControl.Label>Accès PMR</FormControl.Label>
-        <Controller
-          control={control}
-          rules={{
-            maxLength: 100,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Checkbox
-              // style={styles.input}
-              // render boolean value of the checkbox
-              isPressed={value ? true : false}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-          name="handicappedPersonsAccess"
+
+        <Checkbox
+          onChange={() => setWorkspace({ ...workspace, handicappedPersonsAccess: !workspace.handicappedPersonsAccess })}
+          // onChangeText={value => setWorkspace({ ...workspace, handicappedPersonsAccess: value })}
+          value={workspace.handicappedPersonsAccess}
         />
 
         <FormControl.Label>Nombre d'écrans</FormControl.Label>
-        <Controller
-          control={control}
-          rules={{
-            maxLength: 100,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              // style={styles.input}
-              keyboardType="numeric"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-          name="computerScreen"
+        <Input
+          // style={styles.input}
+          keyboardType="numeric"
+
+          onChangeText={value => setWorkspace({ ...workspace, computerScreen: value })}
+          value={workspace.computerScreen}
         />
 
         <FormControl.Label>Nombre de bureaux</FormControl.Label>
-        <Controller
-          control={control}
-          rules={{
-            maxLength: 100,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              // style={styles.input}
-              keyboardType="numeric"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-          name="desk"
+        <Input
+          // style={styles.input}
+          keyboardType="numeric"
+
+          // onChangeText={onChange}
+          onChangeText={value => setWorkspace({ ...workspace, desk: value })}
+          value={workspace.desk}
         />
 
         <FormControl.Label>Ajouter une description à votre annonce</FormControl.Label>
-        <Controller
-          control={control}
-          rules={{
-            maxLength: 100,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextArea
-              placeholder="Description de l'annonce"
-              onChangeText={onChange}
-              onBlur={onBlur}
-              value={value}
-            />
-          )}
-          name="description"
+        <TextArea
+          placeholder="Description de l'annonce"
+
+          onChangeText={value => setWorkspace({ ...workspace, description: value })}
+          value={workspace.description}
         />
 
         <FormControl.Label>Adresse</FormControl.Label>
-        <Controller
-          control={control}
-          rules={{
-            maxLength: 100,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              placeholder="Numéro et nom de rue"
-              onBlur={onBlur}
-              onChangeText={(text) => setAdress(text)}
-              value={adress}
-            />
-          )}
-          name="adress"
+        <Input
+          placeholder="Numéro et nom de rue"
+
+          onChangeText={(text) => setAdress(text)}
+          value={adress}
         />
 
         {displaySuggestions && (
@@ -277,7 +159,7 @@ export default function App() {
                 onPress={() => {
                   setAdress(item.properties.label)
                   setWorkspace(workspace => ({
-                    // ...workspace,
+                    ...workspace,
                     adress: item.properties.label,
                     zipCode: item.properties.postcode,
                     city: item.properties.city,
@@ -296,79 +178,38 @@ export default function App() {
         )}
 
         <FormControl.Label>Code postal</FormControl.Label>
-        <Controller
-          control={control}
-          rules={{
-            maxLength: 100,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              keyboardType="numeric"
-              placeholder="44000"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            // value={workspace.zipCode}
-            />
-          )}
-          name="zipCode"
-        />
+        <Input
+          keyboardType="numeric"
+          placeholder="44000"
 
+          onChangeText={value => setWorkspace({ ...workspace, zipCode: value })}
+          value={workspace.zipCode}
+        />
         <FormControl.Label>Département</FormControl.Label>
-        <Controller
-          control={control}
-          rules={{
-            maxLength: 100,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              placeholder="Vendée"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              // value={workspace.departement}
-              value={value}
-            />
-          )}
-          name="departement"
+        <Input
+          placeholder="Vendée"
+
+          onChangeText={value => setWorkspace({ ...workspace, departement: value })}
+          value={workspace.departement}
         />
 
         <FormControl.Label>Région</FormControl.Label>
-        <Controller
-          control={control}
-          rules={{
-            maxLength: 100,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              placeholder="Vendée"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              // value={workspace.region}
-              value={value}
-            />
-          )}
-          name="region"
+        <Input
+          placeholder="Vendée"
+
+          onChangeText={value => setWorkspace({ ...workspace, region: value })}
+          value={workspace.region}
         />
 
         <FormControl.Label>Ville</FormControl.Label>
-        <Controller
-          control={control}
-          rules={{
-            maxLength: 100,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              placeholder="44000"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              // value={workspace.city}
-              value={value}
-            />
-          )}
-          name="city"
+        <Input
+          placeholder="44000"
+
+          onChangeText={value => setWorkspace({ ...workspace, city: value })}
+          value={workspace.city}
         />
 
-        <Button title="Ajouter" onPress={handleSubmit(onSubmit)} />
+        <Button title="Ajouter" onPress={onSubmit} />
       </View>
     </KeyboardAwareScrollView >
   );
