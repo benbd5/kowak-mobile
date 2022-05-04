@@ -3,10 +3,9 @@ import { Text, View, TextInput, Button, Alert } from "react-native";
 import { Checkbox, FlatList, FormControl, Input, List, TextArea } from "native-base";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useState, useEffect } from "react";
-import { postWorkspace } from "../../services/api";
+import { updateWorkspace } from "../../services/api";
 
 export default function App() {
-  const [parkingChecked, setParkingChecked] = useState(false);
   const [adress, setAdress] = useState('');
   const [addressSuggestions, setAddressSuggestions] = useState([]);
   const [displaySuggestions, setDisplaySuggestions] = useState(false);
@@ -32,7 +31,7 @@ export default function App() {
 
   const onSubmit = () => {
     console.log("workspace", workspace);
-    postWorkspace(workspace);
+    updateWorkspace(workspace);
   }
 
   // Api adresses
@@ -208,7 +207,7 @@ export default function App() {
           value={workspace.city}
         />
 
-        <Button title="Ajouter" onPress={onSubmit} />
+        <Button title="Modifier" onPress={onSubmit} />
       </View>
     </KeyboardAwareScrollView >
   );
