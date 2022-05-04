@@ -165,21 +165,23 @@ const userProfile = async () => {
   const getUserToken = await AsyncStorage.getItem('access_token')
   const userToken = getUserToken ? JSON.parse(getUserToken) : null
 
-  axios.get("http://10.0.2.2:8000/api/user", {
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      'X-CSRF-TOKEN': userToken,
-      'X-XSRF-TOKEN': userToken,
-      'Cookie': `XSRF-TOKEN=${userToken}`,
-      Authorization: `Bearer ${userToken}`
-    }
-  })
-    .then(response => {
-      // console.log('response', response);
-      return response.data
+
+  try {
+    const res = await axios.get("http://10.0.2.2:8000/api/user", {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-CSRF-TOKEN': userToken,
+        'X-XSRF-TOKEN': userToken,
+        'Cookie': `XSRF-TOKEN=${userToken}`,
+        Authorization: `Bearer ${userToken}`
+      }
     })
-    .catch(error => console.log('error', error))
+    const user = res.data
+    return user
+  } catch (error) {
+    console.log('error', error);
+  }
 }
 
 const getAllWorkspaces = async () => {
