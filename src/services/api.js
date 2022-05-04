@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { actionTypes } from '../contexts/AuthContext'
 
 const api = axios.create({
-  baseURL: 'http://10.0.0.12:8000',
+  baseURL: 'http://10.0.2.2:8000',
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json'
@@ -15,7 +15,7 @@ const api = axios.create({
 const csrf = () => api.get('/sanctum/csrf-cookie')
 
 const register = async ({ credentials }) => {
-  fetch('http://10.0.0.12:8000/register', {
+  fetch('http://10.0.2.2:8000/register', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -46,10 +46,10 @@ const login = async (credentials, dispatch) => {
   };
 
 
-  axios.get("http://10.0.0.12:8000/sanctum/csrf-cookie").then(responseCsrf => {
+  axios.get("http://10.0.2.2:8000/sanctum/csrf-cookie").then(responseCsrf => {
     console.log('responseCsrf', responseCsrf);
     axios
-      .post('http://10.0.0.12:8000/api/sanctum/token', data, config)
+      .post('http://10.0.2.2:8000/api/sanctum/token', data, config)
       .then(function (responseSanctumToken) {
         console.log('responseSanctumToken', responseSanctumToken);
         AsyncStorage.setItem('access_token', JSON.stringify(responseSanctumToken.data.access_token))
@@ -88,7 +88,7 @@ const loginAfter = async (credentials, dispatch) => {
   };
 
   axios
-    .post('http://10.0.0.12:8000/login', data, config)
+    .post('http://10.0.2.2:8000/login', data, config)
     .then(function (response) {
       console.log('response login', response);
       dispatch({ type: actionTypes.LOGIN, data: { user: response.data.user, token: userToken } })
@@ -143,7 +143,7 @@ const logout = async () => {
 
   var config = {
     method: 'post',
-    url: ' http://10.0.0.12:8000/logout',
+    url: ' http://10.0.2.2:8000/logout',
     headers: {
       'Accept': 'application/json',
     }
@@ -165,7 +165,7 @@ const userProfile = async () => {
   const getUserToken = await AsyncStorage.getItem('access_token')
   const userToken = getUserToken ? JSON.parse(getUserToken) : null
 
-  axios.get("http://10.0.0.12:8000/api/user", {
+  axios.get("http://10.0.2.2:8000/api/user", {
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -188,19 +188,43 @@ const getAllWorkspaces = async () => {
   const getUserToken = await AsyncStorage.getItem('access_token')
   const userToken = getUserToken ? JSON.parse(getUserToken) : null
 
-  axios.get("http://10.0.0.12:8000/api/workSpace", {
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      'X-XSRF-TOKEN': userToken,
-      Authorization: `Bearer ${userToken}`
-    }
-  })
-    .then(response => {
-      console.log('getAllWorkspaces', response);
-      return response.data
+  try {
+    const res = await axios.get("http://10.0.2.2:8000/api/workSpace", {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-XSRF-TOKEN': userToken,
+        Authorization: `Bearer ${userToken}`
+      }
     })
-    .catch(error => console.log('error', error))
+    const workspaces = res.data.page.data
+    return workspaces
+  } catch (error) {
+    console.log('error', error);
+  }
+}
+
+const showSpecificWorkspace = async (id) => {
+  var axios = require('axios');
+  // On récupère le token de l'utilisateur connecté pour le passer dans le header
+  const getUserToken = await AsyncStorage.getItem('access_token')
+  const userToken = getUserToken ? JSON.parse(getUserToken) : null
+
+  try {
+    const res = await axios.get(`http://10.0.2.2:8000/api/workSpace/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-XSRF-TOKEN': userToken,
+        Authorization: `Bearer ${userToken}`
+      }
+    })
+    const workspace = res.data.item
+    console.log('api showSpecificWorkspace', workspace);
+    return workspace
+  } catch (error) {
+    console.log('error', error);
+  }
 }
 
 const postWorkspace = async (infos) => {
@@ -222,7 +246,7 @@ const postWorkspace = async (infos) => {
   };
 
   axios
-    .post('http://10.0.0.12:8000/api/workSpace', data, config)
+    .post('http://10.0.2.2:8000/api/workSpace', data, config)
     .then(function (response) {
       console.log('response postWorkspace', response);
       return response.data
@@ -230,7 +254,6 @@ const postWorkspace = async (infos) => {
     .catch(function (error) {
       console.log(error);
     });
-
 }
 
 
@@ -243,5 +266,6 @@ export {
   logout,
   userProfile,
   getAllWorkspaces,
-  postWorkspace
+  postWorkspace,
+  showSpecificWorkspace
 }

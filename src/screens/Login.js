@@ -1,9 +1,9 @@
 import React from 'react'
 import { Box, Button, Center, Text } from 'native-base'
 import { TouchableOpacity } from 'react-native'
-import LoginForm from '../auth/LoginForm'
-import { loginUser, logoutUser, useAuth } from '../../contexts/AuthContext'
-import { login, logout } from '../../services/api'
+import { loginUser, logoutUser, useAuth } from './../contexts/AuthContext'
+import LoginForm from './../components/auth/LoginForm'
+import { login, logout } from '../services/api'
 
 function LoginScreen({ navigation }) {
 

@@ -4,7 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 import { Checkbox, FlatList, FormControl, Input, List, TextArea } from "native-base";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useState, useEffect } from "react";
-import { postWorkspace } from "../../../services/api";
+import { postWorkspace } from "../../services/api";
 
 export default function App() {
   const [parkingChecked, setParkingChecked] = useState(false);
@@ -15,12 +15,12 @@ export default function App() {
   const [workspace, setWorkspace] = useState({
     surface: '',
     name: 'name',
-    kitchen: 'false',
-    parking: 'false',
+    kitchen: false,
+    parking: false,
     computerScreen: '',
-    handicappedPersonsAccess: 'false',
+    handicappedPersonsAccess: false,
     desk: '',
-    projector: 'false',
+    projector: false,
     description: '',
     adress: '',
     city: '',
@@ -33,7 +33,7 @@ export default function App() {
 
   const onSubmit = () => {
     console.log("workspace", workspace);
-    // postWorkspace(data)
+    postWorkspace(workspace);
   }
 
   // Api adresses
@@ -165,8 +165,8 @@ export default function App() {
                     city: item.properties.city,
                     departement: item.properties.context.split(',')[1],
                     region: item.properties.context.split(',')[2],
-                    latitude: item.geometry.coordinates[0],
-                    longitude: item.geometry.coordinates[1],
+                    longitude: item.geometry.coordinates[0],
+                    latitude: item.geometry.coordinates[1],
                   }))
                   setDisplaySuggestions(false)
                 }}

@@ -1,9 +1,9 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import HomeScreen from '../screens/Home'
-import AccountScreen from '../screens/Account'
-import PostWorkspace from '../screens/workspaces/Post'
+import HomeScreen from '../../screens/Home'
+import AccountScreen from '../../screens/Account'
+import PostWorkspace from '../../screens/workspaces/Post'
 
 const Tab = createBottomTabNavigator();
 

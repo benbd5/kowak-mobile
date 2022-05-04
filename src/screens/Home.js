@@ -1,15 +1,18 @@
-import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Skeleton } from 'native-base';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Button } from 'react-native'
-import { logoutUser, useAuth } from '../../contexts/AuthContext';
-import { getAllWorkspaces, logout, userProfile } from '../../services/api';
+import Workspaces from '../components/Workspaces';
+import { logoutUser, useAuth } from './../contexts/AuthContext';
+import { getAllWorkspaces, logout, userProfile } from './../services/api';
 
 function HomeScreen({ navigation }) {
-  // console.log('profile', userProfile());
-  console.log('getAllWorkspaces', getAllWorkspaces());
+
   const { dispatch } = useAuth()
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Workspaces />
       <Text>Home Screen</Text>
       <Button
         title="Go to Account"

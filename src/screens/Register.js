@@ -1,8 +1,8 @@
 import React from 'react'
 import { Box, Center, Text } from 'native-base'
 import { TouchableOpacity } from 'react-native'
-import { registerUser, useAuth } from '../../contexts/AuthContext'
-import RegisterForm from '../auth/RegisterForm'
+import { registerUser, useAuth } from './../contexts/AuthContext'
+import RegisterForm from './../components/auth/RegisterForm'
 
 function RegisterScreen({ navigation }) {
 

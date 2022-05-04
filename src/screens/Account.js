@@ -1,8 +1,7 @@
 import { Center, Heading, NativeBaseProvider, VStack } from 'native-base';
 import React from 'react';
 import { View, Text, Button } from 'react-native'
-import NativeBaseIcon from '../NativeBaseIcon';
-import ToggleDarkMode from '../Theme/ToggleDarkMode';
+import ToggleDarkMode from './../components/Theme/ToggleDarkMode';
 
 function AccountScreen({ navigation }) {
   return (
@@ -13,7 +12,6 @@ function AccountScreen({ navigation }) {
         px={4}
         flex={1}>
         <VStack space={5} alignItems="center">
-          <NativeBaseIcon />
           <Heading size="lg">Kowak</Heading>
           <ToggleDarkMode />
         </VStack>
