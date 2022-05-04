@@ -256,6 +256,56 @@ const postWorkspace = async (infos) => {
     });
 }
 
+const updateWorkspace = async (id, infos) => {
+  var axios = require('axios');
+  var data = infos
+  // On récupère le token de l'utilisateur connecté pour le passer dans le header
+  const getUserToken = await AsyncStorage.getItem('access_token')
+  const userToken = getUserToken ? JSON.parse(getUserToken) : null
+  console.log('userToken', userToken);
+  console.log('data', data);
+  var config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'X-XSRF-TOKEN': userToken,
+      Authorization: `Bearer ${userToken}`
+    },
+    data: data
+  };
+  try {
+    const res = await axios.put(`http://10.0.2.2:8000/api/workSpace/${id}`, data, config)
+    const workspace = res
+    console.log('update', workspace);
+    return workspace
+  } catch (error) {
+    console.log('error', error);
+  }
+}
+
+const likeWorkspace = async (id) => {
+  var axios = require('axios');
+  // On récupère le token de l'utilisateur connecté pour le passer dans le header
+  const getUserToken = await AsyncStorage.getItem('access_token')
+  const userToken = getUserToken ? JSON.parse(getUserToken) : null
+
+  var config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'X-XSRF-TOKEN': userToken,
+      Authorization: `Bearer ${userToken}`
+    }
+  };
+  try {
+    const res = await axios.get(`http://10.0.2.2:8000/api/like/${id}`, config)
+    const workspace = res
+    console.log('like', workspace);
+    return workspace
+  } catch (error) {
+    console.log('error', error);
+  }
+}
 
 export {
   register,
@@ -267,5 +317,7 @@ export {
   userProfile,
   getAllWorkspaces,
   postWorkspace,
-  showSpecificWorkspace
+  showSpecificWorkspace,
+  updateWorkspace,
+  likeWorkspace
 }
