@@ -1,6 +1,7 @@
 import { Button, ScrollView, Skeleton, Text, View } from "native-base";
 import React, { useState, useEffect } from "react";
 import { likeWorkspace, showSpecificWorkspace } from "../../services/api";
+import Map from "../../components/Map";
 
 export default function Show(workSpace) {
   const id = workSpace.route.params
@@ -9,13 +10,21 @@ export default function Show(workSpace) {
   const [loading, setLoading] = useState(true);
   const [favorite, setFavorite] = useState(false)
   const [message, setMessage] = useState('')
+  const [coordinate, setCoordinate] = useState({
+    latitude: 0,
+    longitude: 0
+  })
 
   useEffect(() => {
     const getData = async () => {
       const response = await showSpecificWorkspace(id)
-      await console.log("Show", response);
-      await setWorkspace(response);
-      await setLoading(false);
+      console.log("Show", response);
+      setWorkspace(response);
+      setCoordinate({
+        latitude: Number(response.latitude),
+        longitude: (response.longitude)
+      })
+      setLoading(false);
     }
     getData();
   }, []);
@@ -99,6 +108,14 @@ export default function Show(workSpace) {
         <Button onPress={addToFavorite}>
           {favorite ? 'Retirer de mes favoris' : 'Ajouter à mes favoris'}
         </Button>
+
+        {coordinate.latitude !== 0 && coordinate.longitude !== 0 ?
+          <Map
+            coordinate={coordinate}
+          />
+          :
+          <Text>Aucune coordonnées</Text>
+        }
       </ScrollView>
     </View>
   );
