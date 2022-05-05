@@ -1,12 +1,11 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native'
-import Workspaces from '../components/Workspaces';
+import { View } from 'react-native'
+import SearchBar from '../components/SearchBar';
 
-function HomeScreen({ navigation }) {
-
+function HomeScreen() {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Workspaces />
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+      <SearchBar />
     </View>
   );
 }

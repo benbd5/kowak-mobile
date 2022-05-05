@@ -4,7 +4,12 @@ import { RefreshControl } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { getAllWorkspaces } from "../services/api";
 
-function Workspaces() {
+/**
+ * 
+ * @param {props} cities Liste des villes récupérées depuis la base de données
+ * @returns 
+ */
+function Workspaces({ cities }) {
   const navigation = useNavigation();
 
   const [listWorkspaces, setListWorkspaces] = useState([]);
@@ -13,7 +18,6 @@ function Workspaces() {
 
   const getData = async () => {
     const workspaces = await getAllWorkspaces()
-    await console.log("workspaces", workspaces);
     await setListWorkspaces(workspaces);
     await setLoading(false);
   }
@@ -26,7 +30,11 @@ function Workspaces() {
 
   useEffect(async () => {
     await getData()
-  }, [])
+    if (cities.length > 0) {
+      await setListWorkspaces(cities);
+      await setLoading(false);
+    }
+  }, [cities])
 
   // Skeleton au chargement
   if (loading) {
@@ -94,7 +102,6 @@ function Workspaces() {
       ))
       }
     </ScrollView>
-    // </KeyboardAwareScrollView >
   );
 }
 
