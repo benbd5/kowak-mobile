@@ -69,19 +69,14 @@ function AccountScreen({ navigation }) {
       </Text>
 
       <Text>
-        Les espaces de travail que vous loués :
+        Les espaces de travail que vous metter à disposition :
       </Text>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Text>
           {profile.item.work_space_appartenir.length > 0 ? profile.item.work_space_appartenir.map(workSpace => {
             return (
-              <View key={workSpace.id}>
-                <Text>
-                  {workSpace.name}
-                </Text>
-                <Text>
-                  {workSpace.adress}
-                </Text>
+              <View key={workSpace.workSpaceId} style={{ justifyContent: 'space-between' }}>
+                <Button title={workSpace.adress} onPress={() => navigation.navigate('Show', workSpace.workSpaceId)} />
               </View>
             )
           }) : <Text>Vous n'avez pas encore loué d'espace de travail</Text>}
