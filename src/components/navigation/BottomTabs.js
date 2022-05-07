@@ -4,6 +4,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import HomeScreen from '../../screens/Home'
 import AccountScreen from '../../screens/Account'
 import PostWorkspace from '../../screens/workspaces/Post'
+import Favorites from '../../screens/Favorites'
 
 const Tab = createBottomTabNavigator();
 
@@ -16,22 +17,22 @@ function BottomTabs() {
           let iconName;
 
           switch (route.name) {
-            case 'Search':
+            case 'Explorer':
               iconName = focused
                 ? 'home-search'
                 : 'home-search-outline';
               break;
-            case 'Account':
+            case 'Profile':
               iconName = focused
                 ? 'account'
                 : 'account-outline';
               break;
-            case 'Favorites':
+            case 'Favoris':
               iconName = focused
                 ? 'heart'
                 : 'heart-outline';
               break;
-            case 'Add':
+            case 'Publier':
               iconName = focused
                 ? 'plus-box'
                 : 'plus-box-outline';
@@ -49,14 +50,44 @@ function BottomTabs() {
           // You can return any component that you like here!
           return <MaterialCommunityIcons name={iconName} size={size} color={color} />
         },
-        tabBarActiveTintColor: 'tomato',
+        tabBarActiveTintColor: '#2563eb',
         tabBarInactiveTintColor: 'gray',
       })}>
-      <Tab.Screen name="Search" component={HomeScreen} />
-      <Tab.Screen name="Favorites" component={HomeScreen} />
-      <Tab.Screen name="Add" component={PostWorkspace} />
+      <Tab.Screen name="Explorer" component={HomeScreen} options={{
+        headerShown: false
+      }}
+      />
+      <Tab.Screen name="Favoris" component={Favorites} options={{
+        headerTitleStyle: {
+          fontSize: 25,
+          fontWeight: 'bold',
+          marginStart: '10%',
+        },
+        headerStyle: {
+          borderBottomColor: 'yellow',
+          borderBottomWidth: 1,
+        }
+      }}
+      />
+      <Tab.Screen name="Publier" component={PostWorkspace} options={{
+        headerShown: true,
+        title: 'Publier',
+        headerTitleStyle: {
+          fontSize: 25,
+          fontWeight: 'bold',
+          marginStart: '10%',
+        },
+        headerStyle: {
+          borderBottomColor: 'yellow',
+          borderBottomWidth: 1,
+        },
+      }}
+      />
       <Tab.Screen name="Kochat" component={AccountScreen} />
-      <Tab.Screen name="Account" component={AccountScreen} />
+      <Tab.Screen name="Profile" component={AccountScreen} options={{
+        headerShown: false
+      }}
+      />
     </Tab.Navigator>
   );
 }

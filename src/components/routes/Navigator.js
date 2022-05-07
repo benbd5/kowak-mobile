@@ -5,6 +5,7 @@ import RegisterScreen from '../../screens/Register';
 import Show from '../../screens/workspaces/Show';
 import BottomTabs from '../navigation/BottomTabs';
 import { useAuth } from '../../contexts/AuthContext';
+import Ads from '../../screens/Ads';
 
 const AuthNavigator = createNativeStackNavigator()
 
@@ -32,7 +33,12 @@ const WorkspacesRoutes = () => (
     }}
   >
     <WorkspacesNavigator.Screen name="Workspaces" component={BottomTabs} />
-    <WorkspacesNavigator.Screen name="Show" component={Show} />
+    <WorkspacesNavigator.Screen name="Show" component={Show} options={{
+      headerShown: true
+    }} />
+    <WorkspacesNavigator.Screen name="Mes annonces" component={Ads} options={{
+      headerShown: true
+    }} />
   </WorkspacesNavigator.Navigator>
 )
 
@@ -41,9 +47,7 @@ function AuthenticatedRoutes() {
   // console.log('user', state)
   if (state.user) {
     return (
-      <WorkspacesRoutes>
-        <BottomTabs />
-      </WorkspacesRoutes>
+      <WorkspacesRoutes />
     )
   }
   return <AuthRoutes />

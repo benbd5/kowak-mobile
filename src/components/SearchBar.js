@@ -1,8 +1,9 @@
-import { FlatList } from "native-base";
+import { FlatList, Icon, Input } from "native-base";
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput } from "react-native";
+import { View, Text } from "react-native";
 import { getAllWorkspaces } from "../services/api";
 import Workspaces from "./Workspaces";
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 // Barre de recherche pour trouver les villes où des espaces de travail sont disponibles
 // Recherche par nom de ville dynamique (à partir de la base de données)
@@ -32,41 +33,46 @@ export default function SearchBar() {
   }, [searchQuery])
 
   return (
-    <View style={{ width: '100%' }}>
-      <TextInput
-        style={{ height: 40, borderWidth: 1 }}
-        onChangeText={onChangeSearch}
-        value={searchQuery}
-        placeholder="Search"
-        autoFocus={false}
-      />
-      {searchQuery.length > 0 && displaySuggestions && (
-        <FlatList
-          data={citiesSuggestions}
-          keyExtractor={(item) => item.workSpaceId}
-          renderItem={({ item }) => (
-            <Text
-              style={{
-                padding: 10,
-                fontSize: 12,
-                height: 44,
-                borderBottomWidth: 1,
-                borderBottomColor: '#ccc',
-                backgroundColor: '#fff',
-                color: '#000',
-              }}
-              title={item.city}
-              onPress={() => {
-                setSearchQuery(item.city)
-                setDisplaySuggestions(false)
-              }
-              }
-            >
-              {item.city}
-            </Text>
-          )}
+    <View style={{ width: '90%', marginTop: 40 }}>
+      <View>
+        <Input
+          style={{ padding: 10 }}
+          onChangeText={onChangeSearch}
+          value={searchQuery}
+          placeholder="Où travailler ?"
+          autoFocus={false}
+          variant="underlined"
+          borderBottomColor={'#2563eb'}
+          InputLeftElement={<Icon m="2" ml="3" size="6" color="#2563eb" as={<EvilIcons name="search" />} />}
         />
-      )}
+        {searchQuery.length > 0 && displaySuggestions && (
+          <FlatList
+            data={citiesSuggestions}
+            keyExtractor={(item) => item.workSpaceId}
+            renderItem={({ item }) => (
+              <Text
+                style={{
+                  padding: 10,
+                  fontSize: 12,
+                  height: 44,
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#ccc',
+                  backgroundColor: '#fff',
+                  color: '#000',
+                }}
+                title={item.city}
+                onPress={() => {
+                  setSearchQuery(item.city)
+                  setDisplaySuggestions(false)
+                }
+                }
+              >
+                {item.city}
+              </Text>
+            )}
+          />
+        )}
+      </View>
 
       {/* Affiche la liste des espaces de travail */}
       <Workspaces cities={citiesSuggestions} />

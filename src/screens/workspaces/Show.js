@@ -1,19 +1,25 @@
-import { Button, ScrollView, Skeleton, Text, View } from "native-base";
+import { ScrollView, Text, View } from "native-base";
 import React, { useState, useEffect } from "react";
 import { likeWorkspace, showSpecificWorkspace } from "../../services/api";
 import Map from "../../components/Map";
+import Loading from "../../components/Loading";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
-export default function Show(workSpace) {
+export default function Show(workSpace, { favorites }) {
+  console.log("favorites", favorites);
   const id = workSpace.route.params
 
   const [workspace, setWorkspace] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [favorite, setFavorite] = useState(false)
-  const [message, setMessage] = useState('')
   const [coordinate, setCoordinate] = useState({
     latitude: 0,
     longitude: 0
   })
+
+  // Check if the workspace is already in the favorite list of the current user
+  // const isFavorite = favorites.user.original.favorites.find(favorite => favorite.workSpaceId === workspace.workSpaceId);
+  const [favorite, setFavorite] = useState(favorites);
+  // const [favorite, setFavorite] = useState('');
 
   useEffect(() => {
     const getData = async () => {
@@ -29,35 +35,20 @@ export default function Show(workSpace) {
     getData();
   }, []);
 
+  // Add to favorite
   const addToFavorite = async () => {
-    await likeWorkspace(id)
+    await likeWorkspace(workspace.workSpaceId)
     if (favorite) {
       setFavorite(false)
-      setMessage('Removed from favorite')
     }
     else {
       setFavorite(true)
-      setMessage('Added to favorite')
     }
   }
 
-  // when favorite is true, display a message during 3 seconds and then remove it from the screen
-  useEffect(() => {
-    if (favorite) {
-      setTimeout(() => {
-        setMessage('')
-      }, 3000)
-    }
-  }, [favorite])
-
   if (loading) {
     return (
-      <>
-        <Skeleton h={130} mb={3} />
-        <Skeleton h={130} mb={3} />
-        <Skeleton h={130} mb={3} />
-        <Skeleton h={130} mb={3} />
-      </>
+      <Loading />
     )
   }
 
@@ -68,15 +59,11 @@ export default function Show(workSpace) {
         h='100%'
         w='100%'>
 
-        {/* Message ajouter/retirer en favoris */}
-        {favorite ?
-          <Text style={{ fontSize: 20, color: '#ff0000' }}>
-            {message}
-          </Text>
-          :
-          <Text style={{ fontSize: 20, color: '#ff0000' }}>
-            {message}
-          </Text>
+        {
+          favorite ?
+            <MaterialCommunityIcons name='heart' size={30} color='#2563eb' onPress={addToFavorite} />
+            :
+            <MaterialCommunityIcons name='heart-outline' size={30} color='#2563eb' onPress={addToFavorite} />
         }
 
         <Text>{workspace?.name}</Text>
@@ -105,9 +92,6 @@ export default function Show(workSpace) {
           Accès personnes handicapées :
           {workspace?.handicappedPersonsAccess == 1 ? ' Oui' : ' Non'}
         </Text>
-        <Button onPress={addToFavorite}>
-          {favorite ? 'Retirer de mes favoris' : 'Ajouter à mes favoris'}
-        </Button>
 
         {coordinate.latitude !== 0 && coordinate.longitude !== 0 ?
           <Map

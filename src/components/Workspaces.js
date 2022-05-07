@@ -1,8 +1,10 @@
-import { Link, List, Skeleton, Text, View, TouchableOpacity, ScrollView, Button } from "native-base";
+import { ScrollView } from "native-base";
 import React, { useState, useEffect } from "react";
 import { RefreshControl } from 'react-native'
-import { useNavigation } from '@react-navigation/native';
-import { getAllWorkspaces } from "../services/api";
+import { getAllWorkspaces, userProfile } from "../services/api";
+import Loading from "./Loading";
+import BoxWorkspace from "./BoxWorkspace";
+import { useFocusEffect } from '@react-navigation/native';
 
 /**
  * 
@@ -10,13 +12,31 @@ import { getAllWorkspaces } from "../services/api";
  * @returns 
  */
 function Workspaces({ cities }) {
-  const navigation = useNavigation();
-
   const [listWorkspaces, setListWorkspaces] = useState([]);
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = React.useState(false)
+  const [profile, setProfile] = useState()
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchUser = async () => {
+        try {
+          await getData()
+        } catch (error) {
+          console.log('error', error);
+        }
+      }
+      fetchUser()
+    }, [])
+  )
+
+  // useEffect(async () => {
+  //   await getData();
+  // }, []);
 
   const getData = async () => {
+    const response = await userProfile()
+    await setProfile(response);
     const workspaces = await getAllWorkspaces()
     await setListWorkspaces(workspaces);
     await setLoading(false);
@@ -39,66 +59,23 @@ function Workspaces({ cities }) {
   // Skeleton au chargement
   if (loading) {
     return (
-      <>
-        <Skeleton h={130} mb={3} />
-        <Skeleton h={130} mb={3} />
-        <Skeleton h={130} mb={3} />
-        <Skeleton h={130} mb={3} />
-        <Skeleton h={130} mb={3} />
-      </>
+      <Loading />
     )
   }
 
-
   return (
     <ScrollView
-      style={{ maxWidth: '100%' }}
-      h='100%'
-      w='100%'
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
           onRefresh={onRefresh}
         />
-      }>
-
-      <Text>Tous les espaces de travail</Text>
+      }
+    >
 
       {/* Espaces de travail */}
       {listWorkspaces.map((item) => (
-        <List key={item.workSpaceId}>
-          <Text>{item.name}</Text>
-          <Text>Description :{item.description}</Text>
-          <Text>Région : {item.region}</Text>
-          <Text>Ville : {item.city}</Text>
-          <Text>Adresse : {item.address}</Text>
-          <Text>Code postal : {item.zipCode}</Text>
-          <Text>Latitude : {item.latitude}</Text>
-          <Text>Longitude : {item.longitude}</Text>
-          <Text>Département : {item.departement}</Text>
-          <Text>
-            Surface : {item.surface}m²</Text>
-          <Text>
-            Nombre de bureaux : {item.desk}
-          </Text>
-          <Text>
-            Nombre d'écrans : {item.computerScreen}
-          </Text>
-          <Text>
-            Nombre de projecteurs : {item.projector}
-          </Text>
-          <Text>
-            Parking :
-            {item.parking == 1 ? ' Oui' : ' Non'}
-          </Text>
-          <Text>
-            Accès personnes handicapées :
-            {item.handicappedPersonsAccess == 1 ? ' Oui' : ' Non'}
-          </Text>
-          <Button onPress={() => navigation.navigate('Show', item.workSpaceId)}>
-            Voir
-          </Button>
-        </List>
+        <BoxWorkspace key={item.id} workspace={item} favorites={profile} />
       ))
       }
     </ScrollView>
