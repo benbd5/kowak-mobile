@@ -5,30 +5,53 @@ import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { likeWorkspace, userProfile } from '../services/api';
+import Loading from './Loading';
 
 export default function BoxWorkspace({ workspace, favorites }) {
-  console.log("workspaceBox", workspace);
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(true)
+  const [isError, setIsError] = useState(false);
+
+  // check if th props are loaded
+  useEffect(() => {
+    if (favorites) {
+      setLoading(false)
+    }
+  }, [favorites]);
 
   // Check if the workspace is already in the favorite list of the current user
-  const isFavorite = favorites.user.original.favorites.find(favorite => favorite.workSpaceId === workspace.workSpaceId);
+  const isFavorite = () => {
+    setLoading(true)
+    if (favorites) {
+      setLoading(false)
+      return favorites.user.original.favorites.find(favorite => favorite.workSpaceId === workspace.workSpaceId);
+    }
+  }
+
   const [favorite, setFavorite] = useState(isFavorite);
 
-  console.log("isFavorite", isFavorite);
-  console.log('profile', favorites);
+  if (loading) {
+    <Loading />
+  }
 
-  useFocusEffect(
-    React.useCallback(() => {
-      const fetchUser = async () => {
-        try {
-          await userProfile();
-        } catch (error) {
-          console.log('error', error);
-        }
-      }
-      fetchUser();
-    }, [])
-  )
+  // useFocusEffect(
+  // React.useCallback(() => {
+  //   const fetchUser = async () => {
+  //     setIsError(false);
+  //     setLoading(true);
+  //     console.log('loading', loading);
+  //     try {
+  //       await userProfile();
+  //     } catch (error) {
+  //       console.log('error', error);
+  //       setIsError(true);
+  //     }
+  //   }
+  //   fetchUser();
+  //   setLoading(false);
+  //   console.log('loading false', loading);
+  // }, [])
+  // )
 
   // Add to favorite
   const addToFavorite = async () => {
@@ -39,6 +62,14 @@ export default function BoxWorkspace({ workspace, favorites }) {
     else {
       setFavorite(true)
     }
+  }
+
+  if (loading) {
+    <Loading />
+  }
+
+  if (isError) {
+    <Text>Error</Text>
   }
 
   return (
@@ -74,11 +105,14 @@ export default function BoxWorkspace({ workspace, favorites }) {
             </Text>
 
             {
-              favorite ?
-                <MaterialCommunityIcons name='heart' size={30} color='#2563eb' onPress={addToFavorite} />
+              favorite && (
+                <MaterialCommunityIcons name="heart" size={30} color="#2563eb" onPress={() => addToFavorite()} />
+              )
+            }
+            {/* <MaterialCommunityIcons name='heart' size={30} color='#2563eb' onPress={addToFavorite} />
                 :
                 <MaterialCommunityIcons name='heart-outline' size={30} color='#2563eb' onPress={addToFavorite} />
-            }
+            } */}
 
           </VStack>
           <Text>

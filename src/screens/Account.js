@@ -46,7 +46,9 @@ function AccountScreen({ navigation }) {
   }
 
   return (
-    <ScrollView>
+    <ScrollView
+      style={{ backgroundColor: '#fff' }}
+    >
       <VStack space="2.5" mt="4" px="8">
 
         <Avatar
@@ -134,7 +136,7 @@ function AccountScreen({ navigation }) {
 
         <TouchableOpacity>
           <VStack direction='row' justifyContent='space-between'>
-            <MaterialCommunityIcons name="accessibility" size={20} />
+            <MaterialCommunityIcons name="chevron-right" size={20} />
             <Text style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
               Accessibilité
             </Text>
@@ -145,7 +147,7 @@ function AccountScreen({ navigation }) {
 
         <TouchableOpacity>
           <VStack direction='row' justifyContent='space-between'>
-            <MaterialCommunityIcons name="langues" size={20} />
+            <MaterialCommunityIcons name="chevron-right" size={20} />
             <Text style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
               Langues
             </Text>

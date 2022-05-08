@@ -17,18 +17,22 @@ function Workspaces({ cities }) {
   const [refreshing, setRefreshing] = React.useState(false)
   const [profile, setProfile] = useState()
 
-  useFocusEffect(
-    React.useCallback(() => {
-      const fetchUser = async () => {
-        try {
-          await getData()
-        } catch (error) {
-          console.log('error', error);
-        }
+  console.log('workspaces', listWorkspaces)
+  console.log('cities', cities)
+
+  // useFocusEffect(
+  React.useCallback(() => {
+    const fetchUser = async () => {
+      try {
+        await getData()
+      } catch (error) {
+        console.log('error', error);
       }
-      fetchUser()
-    }, [])
-  )
+    }
+    fetchUser()
+    setLoading(false);
+  }, [])
+  // )
 
   // useEffect(async () => {
   //   await getData();
@@ -37,9 +41,10 @@ function Workspaces({ cities }) {
   const getData = async () => {
     const response = await userProfile()
     await setProfile(response);
-    const workspaces = await getAllWorkspaces()
-    await setListWorkspaces(workspaces);
+    // const workspaces = await getAllWorkspaces()
+    // await setListWorkspaces(workspaces);
     await setLoading(false);
+    // return workspaces
   }
 
   // Lors du refresh, on affiche l'animation de refresh, et on rappelle l'api

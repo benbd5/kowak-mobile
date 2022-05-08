@@ -16,18 +16,18 @@ export default function Ads() {
   }
 
   // Permet de récupérer les données de l'utilisateur connecté à chaque fois que l'on se rend sur la page Account
-  useFocusEffect(
-    React.useCallback(() => {
-      const fetchUser = async () => {
-        try {
-          await getData()
-        } catch (error) {
-          console.log('error', error);
-        }
+  // useFocusEffect(
+  React.useCallback(() => {
+    const fetchUser = async () => {
+      try {
+        await getData()
+      } catch (error) {
+        console.log('error', error);
       }
-      fetchUser()
-    }, [])
-  )
+    }
+    fetchUser()
+  }, [])
+  // )
 
   useEffect(async () => {
     await getData();
@@ -40,7 +40,10 @@ export default function Ads() {
   }
 
   return (
-    <Center>
+    <Center
+      style={{
+        backgroundColor: '#fff'
+      }}>
       <ScrollView>
         {
           profile.item.work_space_appartenir.length > 0 ? profile.item.work_space_appartenir.map(workSpace => {

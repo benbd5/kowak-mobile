@@ -6,6 +6,7 @@ import Show from '../../screens/workspaces/Show';
 import BottomTabs from '../navigation/BottomTabs';
 import { useAuth } from '../../contexts/AuthContext';
 import Ads from '../../screens/Ads';
+import ShowUserProfile from '../../screens/ShowUserProfile';
 
 const AuthNavigator = createNativeStackNavigator()
 
@@ -14,7 +15,7 @@ const AuthRoutes = () => (
     initialRouteName='Login'
     screenOptions={{
       headerShown: false,
-      cardStyle: { backgroundColor: '#312e38' }
+      cardStyle: { backgroundColor: '#fff' }
     }}
   >
     <AuthNavigator.Screen name="Login" component={LoginScreen} />
@@ -29,7 +30,7 @@ const WorkspacesRoutes = () => (
     initialRouteName='Workspaces'
     screenOptions={{
       headerShown: false,
-      cardStyle: { backgroundColor: '#312e38' }
+      cardStyle: { backgroundColor: '#fff' }
     }}
   >
     <WorkspacesNavigator.Screen name="Workspaces" component={BottomTabs} />
@@ -37,6 +38,9 @@ const WorkspacesRoutes = () => (
       headerShown: true
     }} />
     <WorkspacesNavigator.Screen name="Mes annonces" component={Ads} options={{
+      headerShown: true
+    }} />
+    <WorkspacesNavigator.Screen name="Profile du loueur" component={ShowUserProfile} options={{
       headerShown: true
     }} />
   </WorkspacesNavigator.Navigator>
