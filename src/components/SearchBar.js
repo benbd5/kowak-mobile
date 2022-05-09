@@ -1,5 +1,5 @@
 import { FlatList, Icon, Input } from "native-base";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { View, Text } from "react-native";
 import { getAllWorkspaces } from "../services/api";
 import Workspaces from "./Workspaces";
@@ -15,12 +15,12 @@ export default function SearchBar() {
   // Fonction appellée lorsque l'utilisateur entre un caractère dans le champ de recherche
   const onChangeSearch = query => setSearchQuery(query);
 
-  const searchCity = (query, list) => {
+  const searchCity = useCallback((query, list) => {
     setDisplaySuggestions(true);
     return list.filter(item => {
       return item.city.toLowerCase().includes(query.toLowerCase());
     });
-  }
+  }, []);
 
   const getData = async () => {
     const workspaces = await getAllWorkspaces()
@@ -33,7 +33,7 @@ export default function SearchBar() {
   }, [searchQuery])
 
   return (
-    <View style={{ width: '90%', marginTop: 40 }}>
+    <View style={{ width: '90%', marginTop: 40, backgroundColor: '#fff' }}>
       <View>
         <Input
           style={{ padding: 10 }}

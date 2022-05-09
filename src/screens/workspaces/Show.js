@@ -1,4 +1,4 @@
-import { AspectRatio, Avatar, Box, Divider, Heading, HStack, Image, ScrollView, Text, View, VStack } from "native-base";
+import { AspectRatio, Avatar, Box, Button, Divider, Heading, HStack, Image, Modal, ScrollView, Text, View, VStack } from "native-base";
 import React, { useState, useEffect } from "react";
 import { likeWorkspace, showSpecificWorkspace } from "../../services/api";
 import Map from "../../components/Map";
@@ -6,7 +6,14 @@ import Loading from "../../components/Loading";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
+import CalendarsList from "../../components/Calendar";
 
+/**
+ * 
+ * @param {*} workSpace params de la navigation = id du workspace
+ * @param {*} favorites  
+ * @returns 
+ */
 export default function Show(workSpace, { favorites }) {
   console.log("favorites", favorites);
   const id = workSpace.route.params
@@ -18,6 +25,16 @@ export default function Show(workSpace, { favorites }) {
     latitude: 0,
     longitude: 0
   })
+  const [showModal, setShowModal] = useState(false);
+  const toggleModal = () => setShowModal(!showModal);
+
+  const getDatesReservation = (startDate, endDate) => {
+    if (!endDate) {
+      endDate = startDate
+    }
+    console.log("startDate", startDate);
+    console.log("endDate", endDate);
+  }
 
   // Check if the workspace is already in the favorite list of the current user
   // const isFavorite = favorites.user.original.favorites.find(favorite => favorite.workSpaceId === workspace.workSpaceId);
@@ -195,6 +212,31 @@ export default function Show(workSpace, { favorites }) {
             }}>
             <Text>{workspace?.description}</Text>
           </Box>
+
+          {/* Ouverture du modal au clic */}
+          <Button
+            backgroundColor={'yellow.300'}
+            borderColor={'black'}
+            borderWidth={1}
+            borderRadius={0}
+            onPress={() => setShowModal(true)}>
+            <Text
+              fontWeight={'bold'}>
+              RESERVER
+            </Text>
+          </Button>
+
+          {/* Modal pour sélectionner les dates de début et de fin de réservation */}
+          <Modal isOpen={showModal} onClose={() => setShowModal(false)} size={'full'} >
+            <Modal.Content>
+              <Modal.CloseButton />
+              <Modal.Header>
+                Réservation
+              </Modal.Header>
+            </Modal.Content>
+            <CalendarsList toggleModal={toggleModal} getDatesReservation={getDatesReservation} workSpace={workSpace.route.params} />
+          </Modal>
+
 
           <Divider
             marginTop={8}

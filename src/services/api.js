@@ -165,7 +165,6 @@ const userProfile = async () => {
   const getUserToken = await AsyncStorage.getItem('access_token')
   const userToken = getUserToken ? JSON.parse(getUserToken) : null
 
-
   try {
     const res = await axios.get("http://10.0.2.2:8000/api/user", {
       headers: {
@@ -199,7 +198,18 @@ const getAllWorkspaces = async () => {
         Authorization: `Bearer ${userToken}`
       }
     })
+
+    // get data of next page of laravel pagination for infinite scroll
+    // const nextPage = res.links.map(link => {
+    //   if (link.url != null) {
+    //     console.log('link', link.url);
+    //     return link.url
+    //   }
+    // })
+
     const workspaces = res.data.page.data
+    console.log('workspaces', workspaces);
+    console.log('workspaces', res);
     return workspaces
   } catch (error) {
     console.log('error', error);
@@ -309,6 +319,39 @@ const likeWorkspace = async (id) => {
   }
 }
 
+/**
+ * 
+ * @param {*} infos Contient l'id de l'utilisateur et les dates de début et de fin de la réservation
+ * @returns 
+ */
+const reservationWorkspace = async (infos) => {
+  var axios = require('axios');
+  var data = infos
+  console.log('data', data);
+
+  // On récupère le token de l'utilisateur connecté pour le passer dans le header
+  const getUserToken = await AsyncStorage.getItem('access_token')
+  const userToken = getUserToken ? JSON.parse(getUserToken) : null
+
+  var config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'X-XSRF-TOKEN': userToken,
+      Authorization: `Bearer ${userToken}`
+    },
+    data: data
+  };
+  try {
+    const res = await axios.post(`http://10.0.2.2:8000/api/location`, data, config)
+    const reservation = res
+    console.log('reservation', reservation);
+    return reservation
+  } catch (error) {
+    console.log('error', error);
+  }
+}
+
 export {
   register,
   login,
@@ -321,5 +364,6 @@ export {
   postWorkspace,
   showSpecificWorkspace,
   updateWorkspace,
-  likeWorkspace
+  likeWorkspace,
+  reservationWorkspace
 }

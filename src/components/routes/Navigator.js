@@ -7,6 +7,7 @@ import BottomTabs from '../navigation/BottomTabs';
 import { useAuth } from '../../contexts/AuthContext';
 import Ads from '../../screens/Ads';
 import ShowUserProfile from '../../screens/ShowUserProfile';
+import Reservation from '../../screens/Reservation';
 
 const AuthNavigator = createNativeStackNavigator()
 
@@ -43,6 +44,7 @@ const WorkspacesRoutes = () => (
     <WorkspacesNavigator.Screen name="Profile du loueur" component={ShowUserProfile} options={{
       headerShown: true
     }} />
+    <WorkspacesNavigator.Screen name="Reservation" component={Reservation} />
   </WorkspacesNavigator.Navigator>
 )
 
