@@ -1,4 +1,4 @@
-import { AspectRatio, Avatar, Box, Button, Divider, Heading, HStack, Image, Modal, ScrollView, Text, View, VStack } from "native-base";
+import { AspectRatio, Avatar, Box, Divider, Heading, HStack, Image, Modal, ScrollView, Text, View, VStack } from "native-base";
 import React, { useState, useEffect } from "react";
 import { likeWorkspace, showSpecificWorkspace } from "../../services/api";
 import Map from "../../components/Map";
@@ -214,17 +214,26 @@ export default function Show(workSpace, { favorites }) {
           </Box>
 
           {/* Ouverture du modal au clic */}
-          <Button
-            backgroundColor={'yellow.300'}
-            borderColor={'black'}
-            borderWidth={1}
-            borderRadius={0}
-            onPress={() => setShowModal(true)}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setShowModal(true)}
+            style={{
+              backgroundColor: '#fef08a',
+              borderColor: '#000',
+              borderWidth: 1,
+              marginTop: 20,
+              padding: 10,
+              borderRadius: 0,
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
             <Text
-              fontWeight={'bold'}>
+              fontWeight={'bold'}
+              fontSize={20}>
               RESERVER
             </Text>
-          </Button>
+          </TouchableOpacity>
 
           {/* Modal pour sélectionner les dates de début et de fin de réservation */}
           <Modal isOpen={showModal} onClose={() => setShowModal(false)} size={'full'} >

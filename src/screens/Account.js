@@ -3,21 +3,25 @@ import { Divider, Heading, ScrollView, Skeleton, VStack, Avatar } from 'native-b
 import React, { useState, useEffect } from 'react';
 import { Text, Button, TouchableOpacity } from 'react-native'
 import { logoutUser, useAuth } from '../contexts/AuthContext';
-import { userProfile } from '../services/api';
+import { getReservations, userProfile } from '../services/api';
 import ToggleDarkMode from './../components/Theme/ToggleDarkMode';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Loading from '../components/Loading';
+import AccountMenu from '../components/AccountMenu';
 
-function AccountScreen({ navigation }) {
+function AccountScreen() {
   const [profile, setProfile] = useState()
+  const [reservations, setReservations] = useState()
   const [loading, setLoading] = useState(true);
 
   const { dispatch } = useAuth()
 
   const getData = async () => {
     const response = await userProfile()
+    const reservations = await getReservations()
     await setProfile(response);
+    await setReservations(reservations);
     await setLoading(false);
   }
 
@@ -47,8 +51,7 @@ function AccountScreen({ navigation }) {
 
   return (
     <ScrollView
-      style={{ backgroundColor: '#fff' }}
-    >
+      style={{ backgroundColor: '#fff' }}>
       <VStack space="2.5" mt="4" px="8">
 
         <Avatar
@@ -64,60 +67,11 @@ function AccountScreen({ navigation }) {
           Les essentiels
         </Heading>
 
-        <TouchableOpacity>
-          <VStack direction='row' justifyContent='space-between'>
-            <MaterialCommunityIcons name="account" size={20} />
-            <Text style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-              Informations personnnelles
-            </Text>
-            <MaterialCommunityIcons name="chevron-right" size={20} />
-          </VStack>
-        </TouchableOpacity>
-        <Divider my="0.5" color='blue.900' />
-
-        <TouchableOpacity>
-          <VStack direction='row' justifyContent='space-between'>
-            <MaterialCommunityIcons name='card-bulleted' size={20} />
-            <Text style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-              Méthodes de paiement
-            </Text>
-            <MaterialCommunityIcons name="chevron-right" size={20} />
-          </VStack>
-          <Divider my="0.5" color='blue.900' />
-        </TouchableOpacity>
-
-        <TouchableOpacity>
-          <VStack direction='row' justifyContent='space-between'>
-            <MaterialCommunityIcons name='wallet' size={20} />
-            <Text style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-              Mon portefeuille
-            </Text>
-            <MaterialCommunityIcons name="chevron-right" size={20} />
-          </VStack>
-          <Divider my="0.5" color='blue.900' />
-        </TouchableOpacity>
-
-        <TouchableOpacity>
-          <VStack direction='row' justifyContent='space-between'>
-            <MaterialCommunityIcons name='contactless-payment' size={20} />
-            <Text style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-              Mes réservations
-            </Text>
-            <MaterialCommunityIcons name="chevron-right" size={20} />
-          </VStack>
-          <Divider my="0.5" color='blue.900' />
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => navigation.navigate('Mes annonces')}>
-          <VStack direction='row' justifyContent='space-between'>
-            <MaterialCommunityIcons name='home' size={20} />
-            <Text style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-              Mes annonces
-            </Text>
-            <MaterialCommunityIcons name="chevron-right" size={20} />
-          </VStack>
-          <Divider my="0.5" color='blue.900' />
-        </TouchableOpacity>
+        <AccountMenu iconName="account" text="Informations personnnelles" />
+        <AccountMenu iconName="card-bulleted" text="Méthodes de paiement" />
+        <AccountMenu iconName="wallet" text="Mon portefeuille" />
+        <AccountMenu iconName="contactless-payment" text="Mes réservations" nav='Mes réservations' profile={reservations} />
+        <AccountMenu iconName="home" text="Mes annonces" nav='Mes annonces' />
 
         <TouchableOpacity>
           <VStack direction='row' justifyContent='space-between'>
@@ -134,56 +88,13 @@ function AccountScreen({ navigation }) {
           Les essentiels
         </Heading>
 
-        <TouchableOpacity>
-          <VStack direction='row' justifyContent='space-between'>
-            <MaterialCommunityIcons name="chevron-right" size={20} />
-            <Text style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-              Accessibilité
-            </Text>
-            <MaterialCommunityIcons name="chevron-right" size={20} />
-          </VStack>
-        </TouchableOpacity>
-        <Divider my="0.5" color='blue.900' />
+        <AccountMenu iconName="chevron-right" text="Accessibilité" />
+        <AccountMenu iconName="chevron-right" text="Langues" />
+        <AccountMenu iconName="account-question-outline" text="FAQ" />
+        <AccountMenu iconName="phone-in-talk-outline" text="Contacter KOWAK" />
 
-        <TouchableOpacity>
-          <VStack direction='row' justifyContent='space-between'>
-            <MaterialCommunityIcons name="chevron-right" size={20} />
-            <Text style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-              Langues
-            </Text>
-            <MaterialCommunityIcons name="chevron-right" size={20} />
-          </VStack>
-        </TouchableOpacity>
-        <Divider my="0.5" color='blue.900' />
-
-        <TouchableOpacity>
-          <VStack direction='row' justifyContent='space-between'>
-            <MaterialCommunityIcons name="account-question-outline" size={20} />
-            <Text style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-              FAQ
-            </Text>
-            <MaterialCommunityIcons name="chevron-right" size={20} />
-          </VStack>
-        </TouchableOpacity>
-        <Divider my="0.5" color='blue.900' />
-
-        <TouchableOpacity>
-          <VStack direction='row' justifyContent='space-between'>
-            <MaterialCommunityIcons name="phone-in-talk-outline" size={20} />
-            <Text style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-              Contacter KOWAK
-            </Text>
-            <MaterialCommunityIcons name="chevron-right" size={20} />
-          </VStack>
-        </TouchableOpacity>
-        <Divider my="0.5" color='blue.900' />
-
-
-
-        <Button title="Go back" onPress={() => navigation.goBack()} />
         <Button title="Déconnexion" onPress={() => logoutUser(dispatch)} />
         {/* <ToggleDarkMode /> */}
-        {/* </View > */}
       </VStack>
     </ScrollView>
   );
