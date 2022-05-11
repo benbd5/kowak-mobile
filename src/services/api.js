@@ -352,6 +352,31 @@ const reservationWorkspace = async (infos) => {
   }
 }
 
+const getReservations = async () => {
+  var axios = require('axios');
+
+  // On récupère le token de l'utilisateur connecté pour le passer dans le header
+  const getUserToken = await AsyncStorage.getItem('access_token')
+  const userToken = getUserToken ? JSON.parse(getUserToken) : null
+
+  var config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'X-XSRF-TOKEN': userToken,
+      Authorization: `Bearer ${userToken}`
+    }
+  };
+  try {
+    const res = await axios.get(`http://10.0.2.2:8000/api/location`, config)
+    const reservation = res
+    console.log('reservation', reservation);
+    return reservation
+  } catch (error) {
+    console.log('error', error);
+  }
+}
+
 export {
   register,
   login,
@@ -365,5 +390,6 @@ export {
   showSpecificWorkspace,
   updateWorkspace,
   likeWorkspace,
-  reservationWorkspace
+  reservationWorkspace,
+  getReservations
 }

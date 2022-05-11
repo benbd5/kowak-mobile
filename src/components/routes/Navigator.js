@@ -8,6 +8,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import Ads from '../../screens/Ads';
 import ShowUserProfile from '../../screens/ShowUserProfile';
 import Reservation from '../../screens/Reservation';
+import Validate from '../../screens/Validated';
+import UserReservation from '../../screens/UserReservations';
 
 const AuthNavigator = createNativeStackNavigator()
 
@@ -44,7 +46,13 @@ const WorkspacesRoutes = () => (
     <WorkspacesNavigator.Screen name="Profile du loueur" component={ShowUserProfile} options={{
       headerShown: true
     }} />
-    <WorkspacesNavigator.Screen name="Reservation" component={Reservation} />
+    <WorkspacesNavigator.Screen name="Réservation" component={Reservation} options={{
+      headerShown: true
+    }} />
+    <WorkspacesNavigator.Screen name="Validated" component={Validate} />
+    <WorkspacesNavigator.Screen name="Mes réservations" component={UserReservation} options={{
+      headerShown: true
+    }} />
   </WorkspacesNavigator.Navigator>
 )
 

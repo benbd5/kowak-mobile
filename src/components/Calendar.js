@@ -3,8 +3,19 @@ import dayjs from 'dayjs';
 import React from 'react';
 import DatepickerRange from 'react-native-range-datepicker';
 
+/**
+ * 
+ * @param {Function} toggleModal Fonction qui inverse le state du modal pour l'ouvrir ou le fermer
+ * @param {Function} getDatesReservation Fonction qui renvoie les dates de réservation
+ * @param {Id} workSpace Id du workspace récupéré dans l'écran précedent
+ * @returns 
+ */
 export default function CalendarsList({ toggleModal, getDatesReservation, workSpace }) {
   const navigation = useNavigation();
+  console.log(workSpace);
+  console.log(toggleModal);
+  console.log(getDatesReservation);
+
 
   const onDayPress = day => {
     console.log('selected day on press', day);
@@ -12,7 +23,7 @@ export default function CalendarsList({ toggleModal, getDatesReservation, workSp
 
   const confirmDates = (startDate, untilDate) => {
     getDatesReservation(startDate, untilDate);
-    navigation.navigate('Reservation', { startDate, untilDate, workSpace });
+    navigation.navigate('Réservation', { startDate, untilDate, workSpace });
     toggleModal()
   }
 

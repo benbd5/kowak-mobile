@@ -4,7 +4,7 @@ import MapboxGL, { Camera, PointAnnotation } from "@react-native-mapbox-gl/maps"
 
 // access token for Mapbox from environment variables
 const token = process.env.MAPBOX_ACCESS_TOKEN;
-MapboxGL.setAccessToken(token);
+MapboxGL.setAccessToken('pk.eyJ1IjoiYmVuYmQiLCJhIjoiY2t6emtrNmVtMGI2OTNicDZjc3NpazVxMSJ9.4kcetBipo--n5-ofd9MkJQ');
 
 const styles = StyleSheet.create({
   page: {
@@ -44,6 +44,8 @@ function Map({ coordinate }) {
             animationDuration={2000}
           />
           <PointAnnotation
+            key="1"
+            id="1"
             coordinate={coordinates}
             onPress={() => {
               console.log("Marker pressed");

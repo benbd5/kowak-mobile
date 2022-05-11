@@ -6,8 +6,17 @@ import { useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { likeWorkspace, userProfile } from '../services/api';
 import Loading from './Loading';
+import dayjs from 'dayjs';
 
-export default function BoxWorkspace({ workspace, favorites }) {
+/**
+ * 
+ * @param {Object} workspace One workspace from the list of workspaces
+ * @param {Object} favorites Retrieve the favorites list of the current user from the navigation params
+ * @param {Date} date The start date of the reservation
+ * @returns 
+ */
+export default function BoxWorkspace({ workspace, favorites, date }) {
+
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true)
   const [isError, setIsError] = useState(false);
@@ -118,6 +127,12 @@ export default function BoxWorkspace({ workspace, favorites }) {
           <Text>
             {workspace.adress}
           </Text>
+
+          {date && (
+            <Text>
+              Date de réservation : {dayjs(date).format('DD MMMM YYYY')}
+            </Text>
+          )}
         </Box>
         <Box>
           <AspectRatio w="100%" ratio={16 / 9}>
