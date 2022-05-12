@@ -33,7 +33,14 @@ export default function BoxWorkspace({ workspace, favorites, date }) {
     setLoading(true)
     if (favorites) {
       setLoading(false)
-      return favorites.user.original.favorites.find(favorite => favorite.workSpaceId === workspace.workSpaceId);
+      try {
+        return favorites.user.original.favorites.find(favorite => favorite.workSpaceId === workspace.workSpaceId);
+      } catch (error) {
+        setIsError(true)
+
+        console.log('error', error)
+        return <Text>Une erreur est survenue</Text>
+      }
     }
   }
 
@@ -97,12 +104,10 @@ export default function BoxWorkspace({ workspace, favorites, date }) {
         },
         shadowOpacity: 0.25,
         elevation: 8,
-      }}
-    >
+      }}>
       <TouchableOpacity
         onPress={() => navigation.navigate('Show', workspace.workSpaceId)}
-        favorites={isFavorite}
-      >
+        favorites={isFavorite}>
         <Box padding={3}>
           <Heading>
             {workspace.name}
@@ -113,11 +118,17 @@ export default function BoxWorkspace({ workspace, favorites, date }) {
               {workspace.desk} bureaux
             </Text>
 
-            {
+            {favorite ?
+              <MaterialCommunityIcons name='heart' size={30} color='#2563eb' onPress={addToFavorite} />
+              :
+              <MaterialCommunityIcons name='heart-outline' size={30} color='#2563eb' onPress={addToFavorite} />
+            }
+
+            {/* {
               favorite && (
                 <MaterialCommunityIcons name="heart" size={30} color="#2563eb" onPress={() => addToFavorite()} />
               )
-            }
+            } */}
             {/* <MaterialCommunityIcons name='heart' size={30} color='#2563eb' onPress={addToFavorite} />
                 :
                 <MaterialCommunityIcons name='heart-outline' size={30} color='#2563eb' onPress={addToFavorite} />

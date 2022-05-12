@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '../../screens/Login';
 import RegisterScreen from '../../screens/Register';
 import Show from '../../screens/workspaces/Show';
+import Edit from '../../screens/workspaces/Edit';
 import BottomTabs from '../navigation/BottomTabs';
 import { useAuth } from '../../contexts/AuthContext';
 import Ads from '../../screens/Ads';
@@ -51,6 +52,9 @@ const WorkspacesRoutes = () => (
     }} />
     <WorkspacesNavigator.Screen name="Validated" component={Validate} />
     <WorkspacesNavigator.Screen name="Mes réservations" component={UserReservation} options={{
+      headerShown: true
+    }} />
+    <WorkspacesNavigator.Screen name="Modification de l'annonce" component={Edit} options={{
       headerShown: true
     }} />
   </WorkspacesNavigator.Navigator>

@@ -41,7 +41,7 @@ export default function Favorites() {
     await getData();
   }, []);
 
-  console.log('favorites', profile)
+  // console.log('favorites', profile)
 
   if (loading) {
     return (
@@ -66,7 +66,7 @@ export default function Favorites() {
           profile.user.original.favorites.length > 0 ?
             profile.user.original.favorites.map(favorite => {
               return (
-                <BoxWorkspace key={favorite.id} workspace={favorite} />
+                <BoxWorkspace key={favorite.id} workspace={favorite} favorites={favorite} />
               )
             }
             ) :

@@ -9,7 +9,7 @@ function HomeScreen() {
   dayjs.locale('fr');
 
   return (
-    <View style={{ alignItems: 'center', justifyContent: 'center', width: '100%', backgroundColor: '#fff' }}>
+    <View style={{ alignItems: 'center', width: '100%', height: '100%', backgroundColor: '#fff' }}>
       <SearchBar />
       {/* <Workspaces /> */}
     </View>

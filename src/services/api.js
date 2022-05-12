@@ -268,7 +268,14 @@ const postWorkspace = async (infos) => {
     });
 }
 
-const updateWorkspace = async (id, infos) => {
+/**
+ * 
+ * @param {Id} id Id du workspace à modifier
+ * @param {Object} infos Les informations à modifier
+ * @returns 
+ */
+const updateWorkspace = async (infos, id) => {
+  console.log('infos', infos);
   var axios = require('axios');
   var data = infos
   // On récupère le token de l'utilisateur connecté pour le passer dans le header
@@ -288,13 +295,47 @@ const updateWorkspace = async (id, infos) => {
   try {
     const res = await axios.put(`http://10.0.2.2:8000/api/workSpace/${id}`, data, config)
     const workspace = res
-    console.log('update', workspace);
     return workspace
   } catch (error) {
     console.log('error', error);
   }
 }
 
+/**
+ * 
+ * @param {Id} id Id du workspace à modifier
+ * @returns 
+ */
+const deleteWorkspace = async (id) => {
+  console.log('id', id.workSpaceId);
+  var axios = require('axios');
+
+  const getUserToken = await AsyncStorage.getItem('access_token')
+  const userToken = getUserToken ? JSON.parse(getUserToken) : null
+
+  var config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'X-XSRF-TOKEN': userToken,
+      Authorization: `Bearer ${userToken}`
+    }
+  };
+  try {
+    const res = await axios.delete(`http://10.0.2.2:8000/api/workSpace/${id.workSpaceId}`, config)
+    const workspace = res
+    console.log('delete', workspace);
+    return workspace
+  } catch (error) {
+    console.log('error', error);
+  }
+}
+
+/**
+ * 
+ * @param {Id} id Id du workspace que l'utilisateur veut liker 
+ * @returns 
+ */
 const likeWorkspace = async (id) => {
   var axios = require('axios');
   // On récupère le token de l'utilisateur connecté pour le passer dans le header
@@ -327,7 +368,6 @@ const likeWorkspace = async (id) => {
 const reservationWorkspace = async (infos) => {
   var axios = require('axios');
   var data = infos
-  console.log('data', data);
 
   // On récupère le token de l'utilisateur connecté pour le passer dans le header
   const getUserToken = await AsyncStorage.getItem('access_token')
@@ -345,7 +385,6 @@ const reservationWorkspace = async (infos) => {
   try {
     const res = await axios.post(`http://10.0.2.2:8000/api/location`, data, config)
     const reservation = res
-    console.log('reservation', reservation);
     return reservation
   } catch (error) {
     console.log('error', error);
@@ -370,7 +409,31 @@ const getReservations = async () => {
   try {
     const res = await axios.get(`http://10.0.2.2:8000/api/location`, config)
     const reservation = res
-    console.log('reservation', reservation);
+    return reservation
+  } catch (error) {
+    console.log('error', error);
+  }
+}
+
+const cancelReservation = async (id) => {
+  var axios = require('axios');
+
+  // On récupère le token de l'utilisateur connecté pour le passer dans le header
+  const getUserToken = await AsyncStorage.getItem('access_token')
+  const userToken = getUserToken ? JSON.parse(getUserToken) : null
+
+  var config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'X-XSRF-TOKEN': userToken,
+      Authorization: `Bearer ${userToken}`
+    }
+  };
+  try {
+    const res = await axios.delete(`http://10.0.2.2:8000/api/location/${id.locationId}`, config)
+    const reservation = res
+    console.log('cancel', reservation);
     return reservation
   } catch (error) {
     console.log('error', error);
@@ -389,7 +452,9 @@ export {
   postWorkspace,
   showSpecificWorkspace,
   updateWorkspace,
+  deleteWorkspace,
   likeWorkspace,
   reservationWorkspace,
-  getReservations
+  getReservations,
+  cancelReservation
 }

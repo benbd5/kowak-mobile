@@ -71,7 +71,7 @@ function AccountScreen() {
         <AccountMenu iconName="card-bulleted" text="Méthodes de paiement" />
         <AccountMenu iconName="wallet" text="Mon portefeuille" />
         <AccountMenu iconName="contactless-payment" text="Mes réservations" nav='Mes réservations' profile={reservations} />
-        <AccountMenu iconName="home" text="Mes annonces" nav='Mes annonces' />
+        <AccountMenu iconName="home" text="Mes annonces" nav='Mes annonces' favorites={profile} />
 
         <TouchableOpacity>
           <VStack direction='row' justifyContent='space-between'>

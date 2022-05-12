@@ -1,18 +1,18 @@
 import { ScrollView, Text, View } from 'native-base';
 import React from 'react';
 import BoxWorkspace from '../components/BoxWorkspace';
+import DeleteAlertButton from '../components/DeleteAlertButton';
+import { cancelReservation } from '../services/api';
 
-export default function UserReservation(profile) {
+export default function UserReservation(profile, { favorites }) {
   const reservations = profile.route.params.data
-  console.log(reservations);
-
+  console.log('reservations', reservations)
+  console.log('favorites', favorites)
   // filter the reservations by startDate and sort them by startDate
   const reservationsByDate = reservations.filter(reservation => reservation.startDate).sort((a, b) => {
     return new Date(a.startDate) - new Date(b.startDate)
   }
   )
-
-  console.log('reservationsByDate', reservationsByDate)
 
   // Afin de trier les réservations et n'afficher que les réservations qui sont dans le futur et aujourd'hui
   // On va utiliser la date d'aujourd'hui - un jour pour avoir la date d'aujourd'hui
@@ -20,13 +20,26 @@ export default function UserReservation(profile) {
   dateOfToday.setDate(dateOfToday.getDate() - 1)
 
   const renderReservation = (reservation, index) => {
-    console.log('new Date().getTime()', new Date().getTime())
-    console.log('new Date(reservation.startDate).getTime()', new Date(reservation.startDate).getTime())
     if (new Date(reservation.startDate) > dateOfToday) {
       return (
-        <BoxWorkspace key={index} workspace={reservation.workSpace} date={reservation.startDate} />
+        <View>
+          <BoxWorkspace key={index} workspace={reservation.workSpace} date={reservation.startDate} favorites={profile} />
+          <DeleteAlertButton
+            workspace={reservation.workSpace}
+            text='ANNULER'
+            validate={() => deleteThisWorkspace(reservation)}
+            width='80%'
+            marginLeft={35}
+            marginBottom={10} />
+        </View>
       )
     }
+  }
+
+  const deleteThisWorkspace = async (workspace) => {
+    console.log("workspace", workspace);
+    await cancelReservation(workspace);
+    navigation.navigate('Validated', 'Votre annonce a bien été supprimée !');
   }
 
   return (

@@ -4,13 +4,19 @@ import React from "react";
 import Button from "../components/Button";
 import Fontisto from "react-native-vector-icons/Fontisto";
 
-export default function Validated() {
-
+/**
+ * 
+ * @param {Object} nav Navigation object pour récupérer le texte à afficher en fonction des écrans 
+ * @returns 
+ */
+export default function Validated(nav) {
   const navigation = useNavigation();
 
   const validate = () => {
     navigation.navigate('Workspaces');
   }
+
+  const text = nav.route.params
 
   return (
     <View
@@ -46,7 +52,7 @@ export default function Validated() {
 
 
       <Text fontWeight={'bold'} textAlign={'center'}>
-        Votre demande de réservation a été envoyé avec succès !
+        {text}
       </Text>
       <Button text={'RETOUR'} validate={validate} />
     </View>

@@ -38,7 +38,7 @@ export default function Reservation(dates) {
       workSpaceId: dates.route.params.workSpace,
     }
     reservationWorkspace(infos)
-    navigation.navigate('Validated')
+    navigation.navigate('Validated', 'Votre réservation a bien été enregistrée')
   }
 
   return (
