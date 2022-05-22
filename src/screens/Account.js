@@ -1,14 +1,15 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { Divider, Heading, ScrollView, Skeleton, VStack, Avatar } from 'native-base';
 import React, { useState, useEffect } from 'react';
-import { Text, Button, TouchableOpacity } from 'react-native'
+import { Text, TouchableOpacity } from 'react-native'
 import { logoutUser, useAuth } from '../contexts/AuthContext';
-import { getReservations, userProfile } from '../services/api';
+import { getReservations, logout, userProfile } from '../services/api';
 import ToggleDarkMode from './../components/Theme/ToggleDarkMode';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Loading from '../components/Loading';
 import AccountMenu from '../components/AccountMenu';
+import Button from '../components/Button';
 
 function AccountScreen() {
   const [profile, setProfile] = useState()
@@ -43,6 +44,11 @@ function AccountScreen() {
     await getData();
   }, []);
 
+  const validate = async () => {
+    await logoutUser(dispatch);
+    // await logout();
+  }
+
   if (loading) {
     return (
       <Loading />
@@ -67,9 +73,9 @@ function AccountScreen() {
           Les essentiels
         </Heading>
 
-        <AccountMenu iconName="account" text="Informations personnnelles" />
-        <AccountMenu iconName="card-bulleted" text="Méthodes de paiement" />
-        <AccountMenu iconName="wallet" text="Mon portefeuille" />
+        <AccountMenu iconName="account" text="Informations personnnelles" nav='' />
+        <AccountMenu iconName="card-bulleted" text="Méthodes de paiement" nav='' />
+        <AccountMenu iconName="wallet" text="Mon portefeuille" nav='' />
         <AccountMenu iconName="contactless-payment" text="Mes réservations" nav='Mes réservations' profile={reservations} />
         <AccountMenu iconName="home" text="Mes annonces" nav='Mes annonces' favorites={profile} />
 
@@ -88,12 +94,12 @@ function AccountScreen() {
           Les essentiels
         </Heading>
 
-        <AccountMenu iconName="chevron-right" text="Accessibilité" />
-        <AccountMenu iconName="chevron-right" text="Langues" />
-        <AccountMenu iconName="account-question-outline" text="FAQ" />
-        <AccountMenu iconName="phone-in-talk-outline" text="Contacter KOWAK" />
+        <AccountMenu iconName="chevron-right" text="Accessibilité" nav='' />
+        <AccountMenu iconName="chevron-right" text="Langues" nav='' />
+        <AccountMenu iconName="account-question-outline" text="FAQ" nav='' />
+        <AccountMenu iconName="phone-in-talk-outline" text="Contacter KOWAK" nav='' />
 
-        <Button title="Déconnexion" onPress={() => logoutUser(dispatch)} />
+        <Button text={"DECONNEXION"} validate={validate} />
         {/* <ToggleDarkMode /> */}
       </VStack>
     </ScrollView>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, Center, Text } from 'native-base'
+import { Box, Center, HStack, Text, View } from 'native-base'
 import { TouchableOpacity } from 'react-native'
 import { loginUser, logoutUser, useAuth } from './../contexts/AuthContext'
 import LoginForm from './../components/auth/LoginForm'
@@ -15,17 +15,17 @@ function LoginScreen({ navigation }) {
   }
 
   return (
-    <Box>
-      <Center>
+    <View style={{ height: '100%', backgroundColor: '#fff' }}>
+      <Center backgroundColor={'#fff'}>
         <LoginForm onLogin={handleLogin} />
         <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-          <Text>Pas de compte ?</Text>
-          <Button onPress={() => logout()}>
-            Logout
-          </Button>
+          <HStack>
+            <Text>Vous n'êtes pas un kowakeur ?</Text>
+            <Text marginLeft={2} underline>Inscrivez-vous !</Text>
+          </HStack>
         </TouchableOpacity>
       </Center>
-    </Box>
+    </View>
   )
 }
 

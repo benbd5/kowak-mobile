@@ -14,26 +14,7 @@ const api = axios.create({
 
 const csrf = () => api.get('/sanctum/csrf-cookie')
 
-const register = async ({ credentials }) => {
-  fetch('http://10.0.2.2:8000/register', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      'X-CSRF-TOKEN': 'eyJpdiI6ImMyUHozZFVUNnNGaVdGY2hwYThtRXc9PSIsInZhbHVlIjoiWVlwK3hFN2JDdjZMMmhUdGFTeGN0WklzOEd0dVZUYVBTUkdTUXY5a3BtWXZURGsySXFhQUJveWJyWVdCSTByWVlYUk9YczhMOVFmVjBPSEQwdkJmZ3pYVWM4amNOK3JNWU1HcmFqcVdBOUdRUnA0bXh3OVVhMXRjemRkNkN5VU0iLCJtYWMiOiI2OTU4OWM4ZDg0MDg5MmEzMmE5MTk5NTBkMDA5YjlkOTg0MTIxNTRlZDI4Y2IzZGJiOWQ4YjA4MGQ2OGI5MjAwIiwidGFnIjoiIn0%3D',
-      Authorization: 'Bearer test'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log('data', data)
-      // return data
-    })
-    .catch(error => console.log('error', error))
-}
-
-const login = async (credentials, dispatch) => {
+const register = async (credentials, dispatch) => {
   var axios = require('axios');
   var data = credentials
 
@@ -45,6 +26,34 @@ const login = async (credentials, dispatch) => {
     data: data
   };
 
+  try {
+    const res = await axios.post('http://10.0.2.2:8000/register', data, config)
+    login({
+      email: credentials.email,
+      password: credentials.password,
+      device_name: 'device'
+    }
+      , dispatch)
+    console.log('register', res.data);
+    // return res.data
+  } catch (error) {
+    console.log('error register', error);
+    return error.response.data
+  }
+}
+
+const login = async (credentials, dispatch) => {
+  console.log('credentials login api', credentials);
+  var axios = require('axios');
+  var data = credentials
+
+  var config = {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    data: data
+  };
 
   axios.get("http://10.0.2.2:8000/sanctum/csrf-cookie").then(responseCsrf => {
     console.log('responseCsrf', responseCsrf);
@@ -53,17 +62,6 @@ const login = async (credentials, dispatch) => {
       .then(function (responseSanctumToken) {
         console.log('responseSanctumToken', responseSanctumToken);
         AsyncStorage.setItem('access_token', JSON.stringify(responseSanctumToken.data.access_token))
-
-        // const token = response.config.headers['X-XSRF-TOKEN'];
-        // console.log('login token', token);
-        // axios.defaults.headers.common['X-XSRF-TOKEN'] = token
-        // AsyncStorage.setItem('token', JSON.stringify(token))
-
-        // const token = responseCsrf.headers['set-cookie'][0].split(';')[0].split('=')[1]
-        // console.log('login token', token);
-        // axios.defaults.headers.common['X-XSRF-TOKEN'] = token
-        // AsyncStorage.setItem('token', JSON.stringify(token))
-
       }).catch(function (error) {
         console.log('error csrf-cookie', error);
       });
@@ -239,33 +237,32 @@ const showSpecificWorkspace = async (id) => {
   }
 }
 
+/**
+ * 
+ * @param {Object} infos Données récupérées du formulaire d'ajout d'un espace de travail
+ */
 const postWorkspace = async (infos) => {
   var axios = require('axios');
   var data = infos
+
   // On récupère le token de l'utilisateur connecté pour le passer dans le header
   const getUserToken = await AsyncStorage.getItem('access_token')
   const userToken = getUserToken ? JSON.parse(getUserToken) : null
-  console.log('userToken', userToken);
-  console.log('data', data);
+
   var config = {
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      'X-XSRF-TOKEN': userToken,
       Authorization: `Bearer ${userToken}`
     },
     data: data
   };
-
-  axios
-    .post('http://10.0.2.2:8000/api/workSpace', data, config)
-    .then(function (response) {
-      console.log('response postWorkspace', response);
-      return response.data
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  try {
+    const res = await axios.post('http://10.0.2.2:8000/api/workSpace', data, config)
+    return res.data
+  } catch (error) {
+    console.log('error', error);
+  }
 }
 
 /**

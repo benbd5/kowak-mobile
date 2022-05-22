@@ -1,65 +1,68 @@
 import React, { useState } from 'react'
-import { Button, Text, FormControl, Input, Center, Box, Heading, VStack, HStack, Link } from 'native-base'
+import { Text, FormControl, Input, Center, Box, Heading, VStack, HStack, Link, Checkbox } from 'native-base'
+import Button from '../Button'
 
 function LoginForm({ onLogin }) {
   const [credentials, setCredentials] = useState({
-    email: 'ben2@kowak.fr',
-    password: '12345678',
-    device_name: 'test mobile',
+    email: '',
+    password: '',
+    device_name: 'device',
   })
 
+  const validate = () => {
+    onLogin(credentials)
+  }
+
   return (
-    <Center w="100%">
+    <Center w="100%" backgroundColor={'#fff'}>
       <Box safeArea p="2" py="8" w="90%" maxW="290">
         <Heading size="lg" fontWeight="600" color="coolGray.800" _dark={{
           color: "warmGray.50"
         }}>
-          Welcome
-        </Heading>
-        <Heading mt="1" _dark={{
-          color: "warmGray.200"
-        }} color="coolGray.600" fontWeight="medium" size="xs">
-          Sign in to continue!
+          SE CONNECTER
         </Heading>
 
         <VStack space={3} mt="5">
           <FormControl>
-            <FormControl.Label>Email ID</FormControl.Label>
+            <FormControl.Label>Adresse mail*</FormControl.Label>
             <Input
               onChangeText={text => setCredentials({ ...credentials, email: text })}
               value={credentials.email}
-              placeholder='contact@kowak.fr' />
+              placeholder='contact@kowak.fr'
+              borderRadius={0}
+              borderColor="black"
+            />
           </FormControl>
           <FormControl>
-            <FormControl.Label>Password</FormControl.Label>
+            <FormControl.Label>Mot de passe*</FormControl.Label>
             <Input
               onChangeText={text => setCredentials({ ...credentials, password: text })}
               value={credentials.password}
-              type="password" />
+              type="password"
+              borderRadius={0}
+              borderColor="black"
+
+            />
             <Link _text={{
               fontSize: "xs",
               fontWeight: "500",
               color: "indigo.500"
-            }} alignSelf="flex-end" mt="1">
-              Forget Password?
+            }} alignSelf="flex-start" mt="1">
+              Mot de passe oublié ?
             </Link>
           </FormControl>
-          <Button mt="2" colorScheme="indigo" onPress={() => onLogin(credentials)}>
-            Sign in
-          </Button>
-          <HStack mt="6" justifyContent="center">
+
+          <Button text={'CONNEXION'} validate={validate} />
+
+          <HStack mt="6" justifyContent="flex-start">
+            <Checkbox checked={true} color="blue.700"
+              borderRadius={0}
+            />
             <Text fontSize="sm" color="coolGray.600" _dark={{
               color: "warmGray.200"
-            }}>
-              I'm a new user.{" "}
+            }} marginLeft={2}>
+              Rester connecté
             </Text>
-            <Link _text={{
-              color: "indigo.500",
-              fontWeight: "medium",
-              fontSize: "sm"
-            }} href="#">
-              Sign Up
-            </Link>
           </HStack>
         </VStack>
       </Box>

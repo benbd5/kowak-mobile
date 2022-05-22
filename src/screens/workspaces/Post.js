@@ -7,7 +7,6 @@ import { postWorkspace } from "../../services/api";
 import { useNavigation } from "@react-navigation/native";
 
 export default function App() {
-  const [parkingChecked, setParkingChecked] = useState(false);
   const [adress, setAdress] = useState('');
   const [addressSuggestions, setAddressSuggestions] = useState([]);
   const [displaySuggestions, setDisplaySuggestions] = useState(false);
@@ -43,17 +42,13 @@ export default function App() {
   useEffect(() => {
     const getAdress = async () => {
       var axios = require('axios');
-      axios
-        .get(`https://api-adresse.data.gouv.fr/search/?q=${adress}&type=housenumber&autocomplete=1`)
-        .then(function (response) {
-          console.log('response api adresse', response.data);
-          setDisplaySuggestions(true);
-          setAddressSuggestions(response.data.features);
-          console.log('addressSuggestions', addressSuggestions);
-        })
-        .catch(function (error) {
-          console.log('error api adresse', error);
-        });
+      try {
+        const response = await axios.get(`https://api-adresse.data.gouv.fr/search/?q=${adress}&type=housenumber&autocomplete=1`);
+        setDisplaySuggestions(true);
+        setAddressSuggestions(response.data.features);
+      } catch (error) {
+        console.log(error);
+      }
     }
     getAdress();
   }, [adress])

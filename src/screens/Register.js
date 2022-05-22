@@ -1,26 +1,31 @@
 import React from 'react'
-import { Box, Center, Text } from 'native-base'
+import { Box, Center, HStack, ScrollView, Text, View } from 'native-base'
 import { TouchableOpacity } from 'react-native'
 import { registerUser, useAuth } from './../contexts/AuthContext'
 import RegisterForm from './../components/auth/RegisterForm'
+import { register } from '../services/api'
 
 function RegisterScreen({ navigation }) {
 
-  const { dispatch } = useAuth()
+  const { dispatch, state } = useAuth()
 
   const handleRegister = async (credentials) => {
-    await registerUser(credentials, dispatch)
+    await register(credentials, dispatch)
+    console.log('user register', state)
   }
 
   return (
-    <Box>
+    <ScrollView style={{ height: '100%', backgroundColor: '#fff' }}>
       <Center>
         <RegisterForm onRegister={handleRegister} />
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <Text>Pas de compte ?</Text>
+          <HStack>
+            <Text>Vous êtes déjà un kowakeur ?</Text>
+            <Text marginLeft={2} underline>Connectez-vous !</Text>
+          </HStack>
         </TouchableOpacity>
       </Center>
-    </Box>
+    </ScrollView>
   )
 }
 
