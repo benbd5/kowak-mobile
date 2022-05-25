@@ -9,7 +9,7 @@ import { TouchableOpacity } from 'react-native';
  * @returns 
  */
 export default function Button({ text, validate }) {
-  console.log("validate", validate);
+  // console.log("validate", validate);
   return (
     <TouchableOpacity
       activeOpacity={0.7}

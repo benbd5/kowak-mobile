@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { ScrollView, Text, View } from 'native-base';
 import React from 'react';
 import BoxWorkspace from '../components/BoxWorkspace';
@@ -10,6 +11,7 @@ export default function UserReservation(profile, { favorites }) {
   console.log('favorites', favorites)
 
   console.log('reservations', reservations)
+  const navigation = useNavigation();
 
   // filter the reservations by startDate and sort them by startDate
   let reservationsByDate
@@ -37,7 +39,8 @@ export default function UserReservation(profile, { favorites }) {
             validate={() => deleteThisWorkspace(reservation)}
             width='80%'
             marginLeft={35}
-            marginBottom={10} />
+            marginBottom={10}
+            textHeader={'Annulation de votre location'} />
         </View>
       )
     }
@@ -46,7 +49,7 @@ export default function UserReservation(profile, { favorites }) {
   const deleteThisWorkspace = async (workspace) => {
     console.log("workspace", workspace);
     await cancelReservation(workspace);
-    navigation.navigate('Validated', 'Votre annonce a bien été supprimée !');
+    navigation.navigate('Validated', 'Votre location a bien été annulée !');
   }
 
   return (

@@ -41,7 +41,7 @@ function LoginForm({ onLogin }) {
               type="password"
               borderRadius={0}
               borderColor="black"
-
+              accessibilityLabel='Mot de passe'
             />
             <Link _text={{
               fontSize: "xs",
@@ -57,6 +57,7 @@ function LoginForm({ onLogin }) {
           <HStack mt="6" justifyContent="flex-start">
             <Checkbox checked={true} color="blue.700"
               borderRadius={0}
+              accessibilityLabel="Remember me"
             />
             <Text fontSize="sm" color="coolGray.600" _dark={{
               color: "warmGray.200"

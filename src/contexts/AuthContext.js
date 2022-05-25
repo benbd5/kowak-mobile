@@ -119,16 +119,21 @@ dispatch({
  */
 
 const registerUser = async (registrationCredentials, dispatch) => {
+  console.log('registrationCredentials', registrationCredentials);
   try {
     const data = await register(registrationCredentials)
-    dispatch({
-      type: actionTypes.REGISTER,
-      data: { user: data.user, token: data.jwt }
-    })
+    if (!data.includes('errors')) {
+      console.log('data', data);
+      dispatch({
+        type: actionTypes.REGISTER,
+        data: { user: data.user, token: data.jwt }
+      })
+    }
   } catch (error) {
+    console.error('ctxt err', error)
     dispatch({
       type: actionTypes.ERROR,
-      data: { error: error.message }
+      data: { error: error }
     })
   }
 }

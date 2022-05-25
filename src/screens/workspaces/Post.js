@@ -15,7 +15,7 @@ export default function App() {
 
   const [workspace, setWorkspace] = useState({
     surface: '',
-    name: 'name',
+    name: '',
     kitchen: false,
     parking: false,
     computerScreen: '',
@@ -57,6 +57,13 @@ export default function App() {
     <KeyboardAwareScrollView>
       <Center style={{ backgroundColor: '#fff' }}>
         <View style={{ backgroundColor: '#fff', width: '90%' }}>
+          <FormControl.Label>Nom de l'annonce</FormControl.Label>
+          <Input
+            placeholder="Nom de l'annonce"
+            onChangeText={value => setWorkspace({ ...workspace, name: value })}
+            value={workspace.name}
+          />
+
           <FormControl.Label>La superficie de l'espace</FormControl.Label>
           <Input
             placeholder="Superficie en m²"
@@ -71,6 +78,7 @@ export default function App() {
           <Checkbox
             value={workspace.kitchen}
             onChange={() => setWorkspace({ ...workspace, kitchen: !workspace.kitchen })}
+            accessibilityLabel="Cuisine"
           />
 
           <FormControl.Label>Parking</FormControl.Label>
@@ -78,18 +86,21 @@ export default function App() {
           <Checkbox
             onChange={() => setWorkspace({ ...workspace, parking: !workspace.parking })}
             value={workspace.parking}
+            accessibilityLabel="Parking"
           />
 
           <FormControl.Label>Projecteur</FormControl.Label>
           <Checkbox
             onChange={() => setWorkspace({ ...workspace, projector: !workspace.projector })}
             value={workspace.projector}
+            accessibilityLabel="Projecteur"
           />
 
           <FormControl.Label>Accès PMR</FormControl.Label>
           <Checkbox
             onChange={() => setWorkspace({ ...workspace, handicappedPersonsAccess: !workspace.handicappedPersonsAccess })}
             value={workspace.handicappedPersonsAccess}
+            accessibilityLabel="Accès PMR"
           />
 
           <FormControl.Label>Nombre d'écrans</FormControl.Label>

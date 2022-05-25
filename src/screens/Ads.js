@@ -106,7 +106,8 @@ export default function Ads() {
                     marginBottom={10}
                     text='SUPPRIMER'
                     width='100%'
-                    validate={() => setAlertDialogIsOpen(true)} />
+                    validate={() => setAlertDialogIsOpen(true)}
+                    textHeader={'Suppression de l\'annonce'} />
                 </HStack>
 
                 <AlertDialog leastDestructiveRef={cancelRef} isOpen={alertDialogIsOpen} onClose={onClose}>

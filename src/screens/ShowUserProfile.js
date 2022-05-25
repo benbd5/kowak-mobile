@@ -29,7 +29,7 @@ export default function ShowUserProfile(profile) {
 
         <VStack>
           <Text>{user.firstName}</Text>
-          <Text>Métier...</Text>
+          <Text>{user?.job}</Text>
         </VStack>
       </HStack>
 

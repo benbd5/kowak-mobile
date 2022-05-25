@@ -33,8 +33,8 @@ export default function Reservation(dates) {
 
   const validate = () => {
     const infos = {
-      startDate: dayjs(startDate).format(),
-      endDate: dayjs(untilDate).format(),
+      startDate: dayjs(startDate).format().split('+')[0],
+      endDate: dayjs(untilDate).format().split('+')[0],
       workSpaceId: dates.route.params.workSpace,
     }
     reservationWorkspace(infos)

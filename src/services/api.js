@@ -258,7 +258,7 @@ const postWorkspace = async (infos) => {
     data: data
   };
   try {
-    const res = await axios.post('http://10.0.2.2:8000/api/workSpace', data, config)
+    const res = await axios.post('(http://10.0.2.2:8000/api/workSpace', data, config)
     return res.data
   } catch (error) {
     console.log('error', error);

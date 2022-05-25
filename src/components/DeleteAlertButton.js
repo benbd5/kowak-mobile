@@ -3,7 +3,7 @@ import { AlertDialog, Button, Text, View } from 'native-base';
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-export default function DeleteAlertButton({ text, validate, width, marginBottom, marginLeft, marginRight, marginTop }) {
+export default function DeleteAlertButton({ text, validate, width, marginBottom, marginLeft, marginRight, marginTop, textHeader }) {
   console.log("validate", validate);
   const [alertDialogIsOpen, setAlertDialogIsOpen] = React.useState(false);
 
@@ -41,9 +41,8 @@ export default function DeleteAlertButton({ text, validate, width, marginBottom,
       <AlertDialog leastDestructiveRef={cancelRef} isOpen={alertDialogIsOpen} onClose={onClose}>
         <AlertDialog.Content>
           <AlertDialog.CloseButton />
-          <AlertDialog.Header>Suppression de l'annonce</AlertDialog.Header>
+          <AlertDialog.Header>{textHeader}</AlertDialog.Header>
           <AlertDialog.Body>
-            Votre va annonce sera supprimée définitivement.
             Voulez-vous vraiment continuer ?
           </AlertDialog.Body>
           <AlertDialog.Footer>
